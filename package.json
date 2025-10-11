@@ -1,0 +1,40 @@
+{
+  "name": "innocivic",
+  "version": "1.0.0",
+  "description": "*A civic data hub for Russia — centralizing, enriching, and sharing public datasets.*",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3llimi/InnoCivic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3llimi/InnoCivic/issues"
+  },
+  "homepage": "https://github.com/3llimi/InnoCivic#readme",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4",
+    "recharts": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
