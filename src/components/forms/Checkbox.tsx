@@ -27,11 +27,27 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
   };
 
   const getCheckboxClasses = () => {
-    const baseClasses = 'h-4 w-4 text-green-600 dark:text-green-500 focus:ring-green-500 dark:focus:ring-green-400 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 accent-green-600';
-    const errorClasses = error ? 'border-red-300 dark:border-red-600 focus:ring-red-500' : '';
-    const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+    const baseClasses = 'h-4 w-4 appearance-none border-2 rounded cursor-pointer transition-colors';
+    const backgroundClasses = 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600';
+    const errorClasses = error ? 'border-red-300 dark:border-red-600' : '';
+    const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
+    const focusClasses = 'focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:ring-offset-1';
 
-    return `${baseClasses} ${errorClasses} ${disabledClasses}`;
+    return `${baseClasses} ${backgroundClasses} ${errorClasses} ${disabledClasses} ${focusClasses}`;
+  };
+
+  const getCheckboxStyle = () => {
+    if (checked && !disabled) {
+      return {
+        backgroundColor: '#16a34a', // green-600
+        borderColor: '#16a34a',
+        backgroundImage: 'url("data:image/svg+xml,%3csvg viewBox=\'0 0 12 12\' xmlns=\'http://www.w3.org/2000/svg\'%3e%3cpath d=\'M10 3L4.5 8.5L2 6\' stroke=\'white\' stroke-width=\'2\' fill=\'none\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3e%3c/svg%3e")',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '80% 80%'
+      };
+    }
+    return {};
   };
 
   return (
@@ -55,7 +71,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
             disabled={disabled}
             required={required}
             className={getCheckboxClasses()}
-            style={{ accentColor: '#16a34a' }}
+            style={getCheckboxStyle()}
             {...props}
           />
         </div>

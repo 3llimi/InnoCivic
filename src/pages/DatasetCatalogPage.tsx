@@ -46,6 +46,27 @@ export const DatasetCatalogPage: React.FC = () => {
   const [pageSize] = useState(12);
   const [showFilters, setShowFilters] = useState(false);
 
+  // File size filter state
+  const [sizeFilters, setSizeFilters] = useState({
+    small: false,
+    medium: false,
+    large: false,
+  });
+
+  // Quality score filter state
+  const [qualityFilters, setQualityFilters] = useState({
+    high: false,
+    medium: false,
+    low: false,
+  });
+
+  // Date range filter state
+  const [dateFilters, setDateFilters] = useState({
+    last7days: false,
+    last30days: false,
+    lastYear: false,
+  });
+
   const updateURL = (params: Record<string, string>) => {
     const newParams = new URLSearchParams(searchParams);
     Object.entries(params).forEach(([key, value]) => {
@@ -96,6 +117,19 @@ export const DatasetCatalogPage: React.FC = () => {
   const handleDatasetDownload = (id: string) => {
     console.log('Downloading dataset:', id);
     // Implement download logic
+  };
+
+  // Filter handlers
+  const handleSizeFilterChange = (filter: 'small' | 'medium' | 'large', checked: boolean) => {
+    setSizeFilters(prev => ({ ...prev, [filter]: checked }));
+  };
+
+  const handleQualityFilterChange = (filter: 'high' | 'medium' | 'low', checked: boolean) => {
+    setQualityFilters(prev => ({ ...prev, [filter]: checked }));
+  };
+
+  const handleDateFilterChange = (filter: 'last7days' | 'last30days' | 'lastYear', checked: boolean) => {
+    setDateFilters(prev => ({ ...prev, [filter]: checked }));
   };
 
   const tabItems = [
@@ -217,27 +251,63 @@ export const DatasetCatalogPage: React.FC = () => {
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">File Size</h4>
                   <div className="space-y-2">
-                    <Checkbox label="Small (< 1MB)" />
-                    <Checkbox label="Medium (1-10MB)" />
-                    <Checkbox label="Large (> 10MB)" />
+                    <Checkbox
+                      label="Small (< 1MB)"
+                      checked={sizeFilters.small}
+                      onChange={(checked) => handleSizeFilterChange('small', checked)}
+                    />
+                    <Checkbox
+                      label="Medium (1-10MB)"
+                      checked={sizeFilters.medium}
+                      onChange={(checked) => handleSizeFilterChange('medium', checked)}
+                    />
+                    <Checkbox
+                      label="Large (> 10MB)"
+                      checked={sizeFilters.large}
+                      onChange={(checked) => handleSizeFilterChange('large', checked)}
+                    />
                   </div>
                 </div>
 
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality Score</h4>
                   <div className="space-y-2">
-                    <Checkbox label="High (8-10)" />
-                    <Checkbox label="Medium (6-8)" />
-                    <Checkbox label="Low (4-6)" />
+                    <Checkbox
+                      label="High (8-10)"
+                      checked={qualityFilters.high}
+                      onChange={(checked) => handleQualityFilterChange('high', checked)}
+                    />
+                    <Checkbox
+                      label="Medium (6-8)"
+                      checked={qualityFilters.medium}
+                      onChange={(checked) => handleQualityFilterChange('medium', checked)}
+                    />
+                    <Checkbox
+                      label="Low (4-6)"
+                      checked={qualityFilters.low}
+                      onChange={(checked) => handleQualityFilterChange('low', checked)}
+                    />
                   </div>
                 </div>
 
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</h4>
                   <div className="space-y-2">
-                    <Checkbox label="Last 7 days" />
-                    <Checkbox label="Last 30 days" />
-                    <Checkbox label="Last year" />
+                    <Checkbox
+                      label="Last 7 days"
+                      checked={dateFilters.last7days}
+                      onChange={(checked) => handleDateFilterChange('last7days', checked)}
+                    />
+                    <Checkbox
+                      label="Last 30 days"
+                      checked={dateFilters.last30days}
+                      onChange={(checked) => handleDateFilterChange('last30days', checked)}
+                    />
+                    <Checkbox
+                      label="Last year"
+                      checked={dateFilters.lastYear}
+                      onChange={(checked) => handleDateFilterChange('lastYear', checked)}
+                    />
                   </div>
                 </div>
               </div>
