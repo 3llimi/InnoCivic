@@ -1,0 +1,288 @@
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { AppLayout } from '../components/layout/AppLayout';
+import { SearchBar } from '../components/forms/SearchBar';
+import { Select } from '../components/forms/Select';
+import { Checkbox } from '../components/forms/Checkbox';
+import { Tabs } from '../components/navigation/Tabs';
+import { Pagination } from '../components/navigation/Pagination';
+import { DatasetList } from '../features/datasets/components/DatasetList';
+import { Dataset } from '../types';
+
+// Mock data
+const mockDatasets: Dataset[] = [
+  // Add more mock datasets here
+];
+
+const categories = [
+  { value: 'all', label: 'All Categories' },
+  { value: 'economy', label: 'Economy' },
+  { value: 'health', label: 'Health' },
+  { value: 'education', label: 'Education' },
+  { value: 'environment', label: 'Environment' },
+  { value: 'transport', label: 'Transport' },
+  { value: 'social', label: 'Social' },
+];
+
+const formats = [
+  { value: 'all', label: 'All Formats' },
+  { value: 'CSV', label: 'CSV' },
+  { value: 'JSON', label: 'JSON' },
+  { value: 'XLSX', label: 'Excel' },
+  { value: 'XML', label: 'XML' },
+  { value: 'PDF', label: 'PDF' },
+];
+
+export const DatasetCatalogPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
+  const [selectedFormat, setSelectedFormat] = useState(searchParams.get('format') || 'all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'recent');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(12);
+  const [showFilters, setShowFilters] = useState(false);
+
+  const updateURL = (params: Record<string, string>) => {
+    const newParams = new URLSearchParams(searchParams);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value && value !== 'all') {
+        newParams.set(key, value);
+      } else {
+        newParams.delete(key);
+      }
+    });
+    setSearchParams(newParams);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+    updateURL({ q: query });
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    updateURL({ category });
+  };
+
+  const handleFormatChange = (format: string) => {
+    setSelectedFormat(format);
+    setCurrentPage(1);
+    updateURL({ format });
+  };
+
+  const handleViewModeChange = (mode: string) => {
+    setViewMode(mode as 'grid' | 'list');
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+    updateURL({ sort });
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleDatasetView = (id: string) => {
+    navigate(`/datasets/${id}`);
+  };
+
+  const handleDatasetDownload = (id: string) => {
+    console.log('Downloading dataset:', id);
+    // Implement download logic
+  };
+
+  const tabItems = [
+    {
+      id: 'all',
+      label: 'All Datasets',
+      content: null,
+    },
+    {
+      id: 'featured',
+      label: 'Featured',
+      content: null,
+    },
+    {
+      id: 'recent',
+      label: 'Recently Added',
+      content: null,
+    },
+    {
+      id: 'popular',
+      label: 'Most Popular',
+      content: null,
+    },
+  ];
+
+  return (
+    <AppLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Dataset Catalog</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Browse and discover public datasets from across Russia
+            </p>
+          </div>
+
+          <div className="mt-4 lg:mt-0 flex items-center space-x-4">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="lg:hidden px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+              Filters
+            </button>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handleViewModeChange('grid')}
+                className={`p-2 rounded-md ${
+                  viewMode === 'grid' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
+                }`}
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+              </button>
+              <button
+                onClick={() => handleViewModeChange('list')}
+                className={`p-2 rounded-md ${
+                  viewMode === 'list' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
+                }`}
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <SearchBar
+                placeholder="Search datasets..."
+                value={searchQuery}
+                onSearch={handleSearch}
+                className="w-full"
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Select
+                options={categories}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                placeholder="Category"
+                className="w-full sm:w-48"
+              />
+
+              <Select
+                options={formats}
+                value={selectedFormat}
+                onChange={handleFormatChange}
+                placeholder="Format"
+                className="w-full sm:w-48"
+              />
+
+              <Select
+                options={[
+                  { value: 'recent', label: 'Most Recent' },
+                  { value: 'popular', label: 'Most Popular' },
+                  { value: 'name', label: 'Name A-Z' },
+                  { value: 'size', label: 'File Size' },
+                ]}
+                value={sortBy}
+                onChange={handleSortChange}
+                placeholder="Sort by"
+                className="w-full sm:w-48"
+              />
+            </div>
+          </div>
+
+          {/* Advanced Filters */}
+          {(showFilters || window.innerWidth >= 1024) && (
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">File Size</h4>
+                  <div className="space-y-2">
+                    <Checkbox label="Small (< 1MB)" />
+                    <Checkbox label="Medium (1-10MB)" />
+                    <Checkbox label="Large (> 10MB)" />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quality Score</h4>
+                  <div className="space-y-2">
+                    <Checkbox label="High (8-10)" />
+                    <Checkbox label="Medium (6-8)" />
+                    <Checkbox label="Low (4-6)" />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date Range</h4>
+                  <div className="space-y-2">
+                    <Checkbox label="Last 7 days" />
+                    <Checkbox label="Last 30 days" />
+                    <Checkbox label="Last year" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <Tabs
+          items={tabItems}
+          activeTab="all"
+          onTabChange={(tabId) => console.log('Tab changed:', tabId)}
+        />
+
+        {/* Results */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Showing {mockDatasets.length} datasets
+            </p>
+          </div>
+
+          <DatasetList
+            datasets={mockDatasets}
+            variant={viewMode}
+            onDatasetView={handleDatasetView}
+            onDatasetDownload={handleDatasetDownload}
+            emptyMessage="No datasets found"
+            emptyDescription="Try adjusting your search or filter criteria to find more datasets."
+          />
+
+          {mockDatasets.length > 0 && (
+            <div className="flex justify-center">
+              <Pagination
+                current={currentPage}
+                total={100} // Mock total
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                showTotal
+                showSizeChanger
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </AppLayout>
+  );
+};
