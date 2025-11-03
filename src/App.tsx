@@ -4,7 +4,7 @@ import { StrictMode } from 'react'
 import { ThemeProvider } from './hooks/ThemeContext'
 import { SidebarProvider } from './hooks/SidebarContext'
 
-import './app.css';
+import './App.css';
 
 function App() {
   return <StrictMode>
