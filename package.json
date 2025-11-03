@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "brojs server --port=8099 --with-open-browser",
     "build": "tsc -b && vite build",
-    "build:prod": "npm run clean && brojs build",
+    "build:prod": "brojs build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
