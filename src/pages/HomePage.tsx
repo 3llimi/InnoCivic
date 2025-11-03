@@ -59,12 +59,12 @@ export const HomePage: React.FC = () => {
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query)}`);
+      navigate(`/innocivic/search?q=${encodeURIComponent(query)}`);
     }
   };
 
   const handleDatasetView = (id: string) => {
-    navigate(`/datasets/${id}`);
+    navigate(`/innocivic/datasets/${id}`);
   };
 
   const handleDatasetDownload = (id: string) => {

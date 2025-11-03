@@ -111,7 +111,7 @@ export const DatasetCatalogPage: React.FC = () => {
   };
 
   const handleDatasetView = (id: string) => {
-    navigate(`/datasets/${id}`);
+    navigate(`/innocivic/datasets/${id}`);
   };
 
   const handleDatasetDownload = (id: string) => {

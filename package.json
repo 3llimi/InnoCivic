@@ -1,12 +1,13 @@
 {
   "name": "innocivic",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "main": "./src/index.tsx",
   "scripts": {
-    "dev": "vite",
+    "dev": "brojs server --port=8099 --with-open-browser",
     "build": "tsc -b && vite build",
-    "build:prod": "tsc -b && vite build",
+    "build:prod": "npm run clean && brojs build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

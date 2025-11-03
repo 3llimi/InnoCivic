@@ -12,47 +12,47 @@ import { ErrorBoundary } from '../components/feedback/ErrorBoundary';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/innocivic',
     element: <HomePage />,
   },
   {
-    path: '/datasets',
+    path: '/innocivic/datasets',
     element: <DatasetCatalogPage />,
   },
   {
-    path: '/datasets/:id',
+    path: '/innocivic/datasets/:id',
     element: <DatasetDetailPage />,
   },
   {
-    path: '/dashboard',
+    path: '/innocivic/dashboard',
     element: <UserDashboardPage />,
   },
   {
-    path: '/login',
+    path: '/innocivic/login',
     element: <LoginPage />,
   },
   {
-    path: '/register',
+    path: '/innocivic/register',
     element: <LoginPage />, // For now, redirect to login
   },
   {
-    path: '/categories',
+    path: '/innocivic/categories',
     element: <CategoriesPage />, // Categories listing page
   },
   {
-    path: '/categories/:category',
+    path: '/innocivic/categories/:category',
     element: <DatasetCatalogPage />, // Category page with parameter
   },
   {
-    path: '/visualizations',
+    path: '/innocivic/visualizations',
     element: <VisualizationsPage />, // Visualizations page
   },
   {
-    path: '/upload',
+    path: '/innocivic/upload',
     element: <UploadPage />, // Upload page
   },
   {
-    path: '/search',
+    path: '/innocivic/search',
     element: <DatasetCatalogPage />, // Search results page
   },
   {
