@@ -3,6 +3,7 @@ import { AppRouter } from './router';
 import { StrictMode } from 'react'
 import { ThemeProvider } from './hooks/ThemeContext'
 import { SidebarProvider } from './hooks/SidebarContext'
+import './index.css';
 
 import './App.css';
 
