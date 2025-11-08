@@ -29,7 +29,7 @@ export const DatasetDetailPage: React.FC = () => {
           tags: ['economy', 'gdp', 'inflation', 'employment', 'russia', '2023'],
           format: 'CSV',
           fileSize: 2048576,
-          fileUrl: '/datasets/economy-2023.csv',
+          fileUrl: 'innocivic/datasets/economy-2023.csv',
           source: 'Ministry of Economic Development',
           license: 'Open Data',
           geographicCoverage: 'Russian Federation',
@@ -84,9 +84,9 @@ export const DatasetDetailPage: React.FC = () => {
   }, [id]);
 
   const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Datasets', href: '/datasets' },
-    { label: dataset?.category.name || 'Category', href: `/datasets?category=${dataset?.category.name}` },
+    { label: 'Home', href: '/innocivic' },
+    { label: 'Datasets', href: '/innocivic/datasets' },
+    { label: dataset?.category.name || 'Category', href: `/innocivic/datasets?category=${dataset?.category.name}` },
     { label: dataset?.title || 'Dataset', current: true },
   ];
 

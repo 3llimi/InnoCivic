@@ -30,18 +30,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     setSearchQuery(query);
     onSearch?.(query);
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query)}`);
+      navigate(`/innocivic/search?q=${encodeURIComponent(query)}`);
     }
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate('/innocivic/login');
     onLogin?.();
   };
 
   const userMenuItems = [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'My Datasets', href: '/dashboard' },
+    { label: 'Dashboard', href: '/innocivic/dashboard' },
+    { label: 'My Datasets', href: '/innocivic/dashboard' },
     { label: 'Settings', href: '/settings' },
     { label: 'Help', href: '/help' },
     { label: 'Logout', onClick: () => { onLogout?.(); navigate('/'); }, divider: true },

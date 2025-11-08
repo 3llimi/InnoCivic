@@ -17,7 +17,7 @@ export const CategoriesPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleCategoryClick = (categoryId: string) => {
-    navigate(`/categories/${categoryId}`);
+    navigate(`innocivic/categories/${categoryId}`);
   };
 
   return (

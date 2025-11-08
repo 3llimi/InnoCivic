@@ -16,7 +16,7 @@ const featuredDatasets: Dataset[] = [
     tags: ['economy', 'gdp', 'inflation', 'employment'],
     format: 'CSV',
     fileSize: 2048576,
-    fileUrl: '/datasets/economy-2023.csv',
+    fileUrl: '/innocivic/datasets/economy-2023.csv',
     source: 'Ministry of Economic Development',
     license: 'Open Data',
     geographicCoverage: 'Russian Federation',
@@ -194,13 +194,13 @@ export const HomePage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/innocivic/dashboard')}
               className="bg-blue-600 dark:bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 font-medium"
             >
               Upload Dataset
             </button>
             <button
-              onClick={() => navigate('/datasets')}
+              onClick={() => navigate('/innocivic/datasets')}
               className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Browse Datasets

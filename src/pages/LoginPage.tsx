@@ -56,7 +56,7 @@ export const LoginPage: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       console.log('Login attempt:', formData);
       // Handle successful login
-      navigate('/dashboard');
+      navigate('/innocivic/dashboard');
     } catch (error) {
       console.error('Login error:', error);
     } finally {
@@ -131,7 +131,7 @@ export const LoginPage: React.FC = () => {
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
             <Link
-              to="/register"
+              to="/innocivic/register"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               Sign up here
