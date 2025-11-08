@@ -14,8 +14,7 @@ export default () => <App/>
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
 const rootElement = document.getElementById("root");
-if (!rootElement) throw new Error('Root element #root not found');
-  
+
 export const mount = (Component: React.ComponentType, element = document.getElementById('app')) => {
   const mountEl = element || rootElement;
   if (!mountEl) throw new Error('Root element not found');
