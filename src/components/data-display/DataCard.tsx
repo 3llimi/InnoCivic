@@ -73,18 +73,18 @@ export const DataCard: React.FC<DataCardProps> = ({
       {/* Header */}
       {(title || subtitle || actions) && (
         <div className="p-6 pb-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                {title && (
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                    {title}
-                  </h3>
-                )}
-                {subtitle && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {subtitle}
-                  </p>
-                )}
+          <div className="flex items-start justify-between">
+            <div className="flex-1 text-left">
+              {title && (
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                  {title}
+                </h3>
+              )}
+              {subtitle && (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {subtitle}
+                </p>
+              )}
             </div>
             {actions && (
               <div className="ml-4 flex-shrink-0">

@@ -64,7 +64,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
   ) : undefined;
 
   const footer = (
-    <div className="flex items-center justify-between text-sm text-gray-500">
+    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
       <div className="flex items-center space-x-4">
         <span className="flex items-center">
           <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,7 +114,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
       actions={actions}
       footer={footer}
       hoverable
-      className={className}
+      className={`text-left ${className}`}
     >
       <div className="space-y-3">
         {/* Category and Format */}
@@ -147,7 +147,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
         )}
 
         {/* Metadata */}
-        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
           <div>
             <span className="font-medium">Size:</span> {formatFileSize(dataset.fileSize)}
           </div>
@@ -163,13 +163,13 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
         </div>
 
         {/* Uploader */}
-        <div className="flex items-center space-x-2 pt-2 border-t border-gray-100">
+        <div className="flex items-center space-x-2 pt-2 border-t border-gray-200 dark:border-gray-700">
           <Avatar user={dataset.uploadedBy} size="sm" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
               {dataset.uploadedBy.fullName}
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {dataset.uploadedBy.affiliation || dataset.uploadedBy.userType}
             </p>
           </div>

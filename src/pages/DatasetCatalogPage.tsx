@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { SearchBar } from '../components/forms/SearchBar';
@@ -8,11 +8,8 @@ import { Tabs } from '../components/navigation/Tabs';
 import { Pagination } from '../components/navigation/Pagination';
 import { DatasetList } from '../features/datasets/components/DatasetList';
 import { Dataset } from '../types';
-
-// Mock data
-const mockDatasets: Dataset[] = [
-  // Add more mock datasets here
-];
+import { fetchDatasets, API_BASE_URL } from '../services/api';
+import { Alert } from '../components/feedback/Alert';
 
 const categories = [
   { value: 'all', label: 'All Categories' },
@@ -45,6 +42,10 @@ export const DatasetCatalogPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12);
   const [showFilters, setShowFilters] = useState(false);
+  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalDatasets, setTotalDatasets] = useState(0);
 
   // File size filter state
   const [sizeFilters, setSizeFilters] = useState({
@@ -66,6 +67,66 @@ export const DatasetCatalogPage: React.FC = () => {
     last30days: false,
     lastYear: false,
   });
+
+  const appliedFilters = useMemo(
+    () => ({
+      searchQuery,
+      selectedCategory,
+      selectedFormat,
+      sortBy,
+      currentPage,
+    }),
+    [searchQuery, selectedCategory, selectedFormat, sortBy, currentPage],
+  );
+
+  useEffect(() => {
+    const loadDatasets = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const params: Record<string, string | number | boolean> = {
+          page: currentPage,
+          limit: pageSize,
+          sort: sortBy,
+        };
+
+        if (searchQuery.trim()) {
+          params.search = searchQuery.trim();
+        }
+        if (selectedCategory !== 'all') {
+          params.category = selectedCategory;
+        }
+        if (selectedFormat !== 'all') {
+          params.format = selectedFormat;
+        }
+
+        const response = await fetchDatasets(params);
+        if (response?.success) {
+          const items = Array.isArray(response.data) ? response.data : [];
+          setDatasets(items);
+          const pagination = (response as Record<string, any>).pagination;
+          if (pagination?.total !== undefined) {
+            setTotalDatasets(Number(pagination.total));
+          } else {
+            setTotalDatasets(items.length);
+          }
+        } else {
+          setDatasets([]);
+          setTotalDatasets(0);
+        }
+      } catch (err) {
+        console.error('Failed to load datasets', err);
+        setError(err instanceof Error ? err.message : 'Failed to load datasets');
+        setDatasets([]);
+        setTotalDatasets(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDatasets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appliedFilters]);
 
   const updateURL = (params: Record<string, string>) => {
     const newParams = new URLSearchParams(searchParams);
@@ -115,8 +176,7 @@ export const DatasetCatalogPage: React.FC = () => {
   };
 
   const handleDatasetDownload = (id: string) => {
-    console.log('Downloading dataset:', id);
-    // Implement download logic
+    window.open(`${API_BASE_URL}/api/datasets/${encodeURIComponent(id)}/download`, '_blank', 'noopener,noreferrer');
   };
 
   // Filter handlers
@@ -158,16 +218,23 @@ export const DatasetCatalogPage: React.FC = () => {
   return (
     <AppLayout>
       <div className="space-y-6">
+        {error && (
+          <Alert
+            type="error"
+            title="Unable to load datasets"
+            message={error}
+          />
+        )}
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-          <div>
+        <div className="space-y-4">
+          <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Dataset Catalog</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Browse and discover public datasets from across Russia
             </p>
           </div>
 
-          <div className="mt-4 lg:mt-0 flex items-center space-x-4">
+          <div className="flex items-center justify-center lg:justify-end space-x-4">
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -219,6 +286,7 @@ export const DatasetCatalogPage: React.FC = () => {
                 onChange={handleCategoryChange}
                 placeholder="Category"
                 className="w-full sm:w-48"
+                wrapperClassName="dark:text-gray-100"
               />
 
               <Select
@@ -227,6 +295,7 @@ export const DatasetCatalogPage: React.FC = () => {
                 onChange={handleFormatChange}
                 placeholder="Format"
                 className="w-full sm:w-48"
+                wrapperClassName="dark:text-gray-100"
               />
 
               <Select
@@ -240,12 +309,13 @@ export const DatasetCatalogPage: React.FC = () => {
                 onChange={handleSortChange}
                 placeholder="Sort by"
                 className="w-full sm:w-48"
+                wrapperClassName="dark:text-gray-100"
               />
             </div>
           </div>
 
           {/* Advanced Filters */}
-          {(showFilters || window.innerWidth >= 1024) && (
+          {(showFilters || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
             <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
@@ -326,12 +396,17 @@ export const DatasetCatalogPage: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Showing {mockDatasets.length} datasets
+              {loading
+                ? 'Loading datasets...'
+                : totalDatasets
+                ? `Showing ${datasets.length} of ${totalDatasets} datasets`
+                : 'No datasets available'}
             </p>
           </div>
 
           <DatasetList
-            datasets={mockDatasets}
+            datasets={datasets}
+            loading={loading}
             variant={viewMode}
             onDatasetView={handleDatasetView}
             onDatasetDownload={handleDatasetDownload}
@@ -339,11 +414,11 @@ export const DatasetCatalogPage: React.FC = () => {
             emptyDescription="Try adjusting your search or filter criteria to find more datasets."
           />
 
-          {mockDatasets.length > 0 && (
+          {totalDatasets > pageSize && (
             <div className="flex justify-center">
               <Pagination
                 current={currentPage}
-                total={100} // Mock total
+                total={totalDatasets}
                 pageSize={pageSize}
                 onChange={handlePageChange}
                 showTotal

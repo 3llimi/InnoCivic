@@ -1,0 +1,46 @@
+[
+  {
+    "id": "74002382-7f27-45c9-9896-d4bd7ba99bb5",
+    "title": "sample",
+    "description": "",
+    "category": {
+      "id": "general",
+      "name": "General",
+      "description": "General civic datasets"
+    },
+    "tags": [],
+    "format": "CSV",
+    "fileUrl": "/datasets/general/community/2025-11-13/customers-100.csv",
+    "fileSize": 17261,
+    "source": "Community Submission",
+    "license": "Open Data",
+    "geographicCoverage": "Russian Federation",
+    "timePeriod": {
+      "start": "2025-11-13",
+      "end": "2025-11-13"
+    },
+    "uploadedBy": {
+      "id": "anonymous-user",
+      "email": "anonymous@innocivic",
+      "username": "anonymous",
+      "fullName": "Anonymous Contributor",
+      "role": "contributor",
+      "userType": "other",
+      "createdAt": "2025-11-13T14:23:27.485Z",
+      "lastLoginAt": "2025-11-13T14:23:27.485Z"
+    },
+    "uploadedAt": "2025-11-13T14:23:27.738024Z",
+    "lastUpdated": "2025-11-13T14:23:27.738024Z",
+    "downloadCount": 0,
+    "viewCount": 0,
+    "qualityScore": 0,
+    "status": "pending",
+    "metadata": {
+      "originalFilename": "customers-100.csv",
+      "contentType": "application/vnd.ms-excel"
+    },
+    "version": "1.0",
+    "isPublic": true,
+    "previewData": null
+  }
+]

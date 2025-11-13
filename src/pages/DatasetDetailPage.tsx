@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
@@ -6,6 +6,7 @@ import { DatasetDetail } from '../features/datasets/components/DatasetDetail';
 import { Loader } from '../components/feedback/Loader';
 import { Alert } from '../components/feedback/Alert';
 import { Dataset } from '../types';
+import { fetchDatasetById, API_BASE_URL } from '../services/api';
 
 export const DatasetDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,62 +18,23 @@ export const DatasetDetailPage: React.FC = () => {
     const fetchDataset = async () => {
       try {
         setLoading(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        if (!id) {
+          setDataset(null);
+          setError('Dataset not found');
+          return;
+        }
 
-        // Mock dataset data
-        const mockDataset: Dataset = {
-          id: id || '1',
-          title: 'Russian Economic Indicators 2023',
-          description: 'Comprehensive economic data including GDP, inflation, and employment statistics for the Russian Federation in 2023.',
-          category: { id: '1', name: 'Economy', description: 'Economic data', icon: '📊' },
-          tags: ['economy', 'gdp', 'inflation', 'employment', 'russia', '2023'],
-          format: 'CSV',
-          fileSize: 2048576,
-          fileUrl: '/datasets/economy-2023.csv',
-          source: 'Ministry of Economic Development',
-          license: 'Open Data',
-          geographicCoverage: 'Russian Federation',
-          timePeriod: { start: '2023-01-01', end: '2023-12-31' },
-          uploadedBy: {
-            id: '1',
-            email: 'analyst@example.com',
-            username: 'econ_analyst',
-            fullName: 'Economic Analyst',
-            role: 'contributor',
-            userType: 'researcher',
-            affiliation: 'Ministry of Economic Development',
-            createdAt: '2023-01-01T00:00:00Z',
-            lastLoginAt: '2024-01-01T00:00:00Z',
-          },
-          uploadedAt: '2024-01-15T10:30:00Z',
-          lastUpdated: '2024-01-15T10:30:00Z',
-          downloadCount: 1250,
-          viewCount: 3200,
-          qualityScore: 9,
-          status: 'approved',
-          metadata: {
-            'Data Source': 'Ministry of Economic Development',
-            'Update Frequency': 'Monthly',
-            'Language': 'Russian',
-            'Encoding': 'UTF-8',
-            'Delimiter': 'Comma',
-            'Headers': 'Yes',
-          },
-          version: '1.0',
-          isPublic: true,
-          previewData: [
-            { month: 'January', gdp: 125000, inflation: 5.2, unemployment: 4.1 },
-            { month: 'February', gdp: 128000, inflation: 5.1, unemployment: 4.0 },
-            { month: 'March', gdp: 130000, inflation: 4.9, unemployment: 3.9 },
-            { month: 'April', gdp: 132000, inflation: 4.8, unemployment: 3.8 },
-            { month: 'May', gdp: 135000, inflation: 4.7, unemployment: 3.7 },
-          ],
-        };
-
-        setDataset(mockDataset);
+        const response = await fetchDatasetById(id);
+        if (response?.success) {
+          setDataset(response.data);
+          setError(null);
+        } else {
+          setDataset(null);
+          setError('Dataset not found');
+        }
       } catch (err) {
-        setError('Failed to load dataset');
+        setError(err instanceof Error ? err.message : 'Failed to load dataset');
+        setDataset(null);
       } finally {
         setLoading(false);
       }
@@ -91,8 +53,10 @@ export const DatasetDetailPage: React.FC = () => {
   ];
 
   const handleDownload = (datasetId: string) => {
-    console.log('Downloading dataset:', datasetId);
-    // Implement download logic
+    if (!datasetId) {
+      return;
+    }
+    window.location.href = `${API_BASE_URL}/api/datasets/${encodeURIComponent(datasetId)}/download`;
   };
 
   const handleShare = (datasetId: string) => {
