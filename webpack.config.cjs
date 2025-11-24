@@ -22,7 +22,7 @@ module.exports = {
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
-          configFile: 'tsconfig.app.json'
+          configFile: 'tsconfig.webpack.json'
         }
       },
       {
