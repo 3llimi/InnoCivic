@@ -158,6 +158,7 @@ export interface SelectProps extends BaseComponentProps {
   label?: string;
   required?: boolean;
   disabled?: boolean;
+  wrapperClassName?: string;
 }
 
 export interface ModalProps extends BaseComponentProps {

@@ -63,8 +63,19 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleFiles = (files: File[]) => {
     const validFiles = files.filter(file => {
+      const fileExtension = file.name.includes('.') ? `.${file.name.split('.').pop()?.toLowerCase()}` : '';
       const isValidType = acceptedTypes.includes('*/*') ||
-        acceptedTypes.some(type => file.type.match(type.replace('*', '.*')));
+        acceptedTypes.some(type => {
+           if (type.startsWith('.')) {
+             return type.toLowerCase() === fileExtension;
+           }
+          if (type.includes('*')) {
+            const [topLevel] = type.toLowerCase().split('/');
+            const [fileTopLevel] = file.type.toLowerCase().split('/');
+            return topLevel === fileTopLevel;
+          }
+           return file.type.toLowerCase() === type.toLowerCase();
+         });
       const isValidSize = file.size <= maxSize * 1024 * 1024;
 
       return isValidType && isValidSize;
@@ -96,6 +107,17 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
 
     return `${baseClasses} ${dragClasses} ${errorClasses} ${disabledClasses}`;
+  };
+
+  const getAcceptedTypesLabel = () => {
+    if (acceptedTypes.includes('*/*')) {
+      return 'Any file type';
+    }
+    const extensions = acceptedTypes.filter((type) => type.startsWith('.')).map((type) => type.toUpperCase());
+    if (extensions.length > 0) {
+      return extensions.join(', ');
+    }
+    return acceptedTypes.join(', ');
   };
 
   return (
@@ -137,7 +159,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </div>
 
           <p className="text-xs text-gray-500">
-            {acceptedTypes.includes('*/*') ? 'Any file type' : acceptedTypes.join(', ')} up to {maxSize}MB
+            {getAcceptedTypesLabel()} up to {maxSize}MB
             {multiple && ` (max ${maxFiles} files)`}
           </p>
         </div>

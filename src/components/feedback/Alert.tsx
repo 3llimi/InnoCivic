@@ -24,20 +24,20 @@ export const Alert: React.FC<AlertProps> = ({
 }) => {
   const getTypeClasses = () => {
     const types = {
-      success: 'bg-green-50 border-green-200 text-green-800',
-      error: 'bg-red-50 border-red-200 text-red-800',
-      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-      info: 'bg-blue-50 border-blue-200 text-blue-800',
+      success: 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/40 dark:border-green-700 dark:text-green-200',
+      error: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/40 dark:border-red-700 dark:text-red-200',
+      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/40 dark:border-yellow-700 dark:text-yellow-100',
+      info: 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-200',
     };
     return types[type];
   };
 
   const getIconClasses = () => {
     const types = {
-      success: 'text-green-400',
-      error: 'text-red-400',
-      warning: 'text-yellow-400',
-      info: 'text-blue-400',
+      success: 'text-green-400 dark:text-green-300',
+      error: 'text-red-400 dark:text-red-300',
+      warning: 'text-yellow-400 dark:text-yellow-200',
+      info: 'text-blue-400 dark:text-blue-300',
     };
     return types[type];
   };
@@ -105,10 +105,13 @@ export const Alert: React.FC<AlertProps> = ({
                 type="button"
                 onClick={onDismiss}
                 className={`inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  type === 'success' ? 'text-green-500 hover:bg-green-100 focus:ring-green-600' :
-                  type === 'error' ? 'text-red-500 hover:bg-red-100 focus:ring-red-600' :
-                  type === 'warning' ? 'text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-600' :
-                  'text-blue-500 hover:bg-blue-100 focus:ring-blue-600'
+                  type === 'success'
+                    ? 'text-green-500 hover:bg-green-100 focus:ring-green-600 dark:text-green-300 dark:hover:bg-green-900/60 dark:focus:ring-green-400'
+                    : type === 'error'
+                    ? 'text-red-500 hover:bg-red-100 focus:ring-red-600 dark:text-red-300 dark:hover:bg-red-900/60 dark:focus:ring-red-400'
+                    : type === 'warning'
+                    ? 'text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-600 dark:text-yellow-200 dark:hover:bg-yellow-900/60 dark:focus:ring-yellow-400'
+                    : 'text-blue-500 hover:bg-blue-100 focus:ring-blue-600 dark:text-blue-300 dark:hover:bg-blue-900/60 dark:focus:ring-blue-400'
                 }`}
               >
                 <span className="sr-only">Dismiss</span>
