@@ -1,14 +1,19 @@
 const webpack = require('webpack');
 
+// Config values for build time
+const config = {
+  BRO_API_BASE_URL: 'https://innocivicapi.ru'
+};
+
 export default {
   apiPath: 'stubs/api',
   webpackConfig: {
     output: {
-      publicPath: `/static/innocivic/1.1.7/`
+      publicPath: `/static/innocivic/1.1.8/`
     },
     plugins: [
       new webpack.DefinePlugin({
-        'process.env.BRO_API_BASE_URL': JSON.stringify(process.env.BRO_API_BASE_URL || 'http://localhost:8000'),
+        __API_BASE_URL__: JSON.stringify(config.BRO_API_BASE_URL),
       }),
     ],
   },
@@ -22,6 +27,6 @@ export default {
     },
   },
   config: {
-    BRO_API_BASE_URL: 'https://innocivicapi.ru'
+    BRO_API_BASE_URL: config.BRO_API_BASE_URL
   }
 }

@@ -5,3 +5,6 @@ declare namespace NodeJS {
     NODE_ENV?: string
   }
 }
+
+// Global constants injected by webpack DefinePlugin
+declare const __API_BASE_URL__: string | undefined;
