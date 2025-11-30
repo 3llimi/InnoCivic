@@ -4,7 +4,7 @@ export default {
   apiPath: 'stubs/api',
   webpackConfig: {
     output: {
-      publicPath: `/static/innocivic/1.1.6/`
+      publicPath: `/static/innocivic/1.1.7/`
     },
     plugins: [
       new webpack.DefinePlugin({
