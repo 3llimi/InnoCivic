@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { BaseComponentProps } from '../../types';
 
 interface CheckboxProps extends BaseComponentProps {
-  label?: string;
+  label?: string | React.ReactNode;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
