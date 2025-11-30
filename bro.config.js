@@ -1,13 +1,15 @@
 export default {
+  name: 'Innocivic',
+  id: 'Innocivic',
   apiPath: 'stubs/api',
   webpackConfig: {
     output: {
-      publicPath: '/static/innocivic/master/'
+      publicPath: '/static/Innocivic/master/'
     }
   },
   /* use https://admin.bro-js.ru/ to create config, navigations and features */
   navigations: {
-    'innocivic.main': '/innocivic',
+    'Innocivic.main': '/innocivic',
   },
   features: {
     'innocivic': {
