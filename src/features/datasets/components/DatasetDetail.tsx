@@ -67,13 +67,13 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {dataset.title}
             </h1>
-            <p className="text-lg text-gray-600 mb-4">
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
               {dataset.description}
             </p>
 
@@ -107,7 +107,7 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
             </button>
             <button
               onClick={() => onShare?.(dataset.id)}
-              className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 font-medium"
+              className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Share
             </button>
@@ -144,13 +144,13 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
         <div className="flex items-center space-x-4">
           <Avatar user={dataset.uploadedBy} size="lg" />
           <div>
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               {dataset.uploadedBy.fullName}
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               {dataset.uploadedBy.affiliation || dataset.uploadedBy.userType}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Joined {new Date(dataset.uploadedBy.createdAt).toLocaleDateString('ru-RU')}
             </p>
           </div>
@@ -184,7 +184,7 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
               compact
             />
           </div>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             Showing first 10 rows of {dataset.previewData.length} total rows
           </p>
         </DataCard>

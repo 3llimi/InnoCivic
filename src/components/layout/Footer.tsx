@@ -35,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({
       <footer className={`bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-4 ${className}`}>
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="text-center text-sm text-gray-500 dark:text-gray-400">
-            <p>© 2024 InnoCivic. All rights reserved.</p>
+            <p>© 2025 InnoCivic. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -136,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="mt-8 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-gray-400">
-              © 2024 InnoCivic. All rights reserved.
+              © 2025 InnoCivic. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0 flex items-center space-x-4 text-sm text-gray-400">
               <span>Made with ❤️ for Russia's civic tech community</span>

@@ -148,7 +148,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <div className="text-xs text-gray-500 dark:text-gray-400">
               <p>InnoCivic v1.0.0</p>
-              <p>© 2024 Civic Data Platform</p>
+              <p>© 2025 Civic Data Platform</p>
             </div>
           </div>
         )}
