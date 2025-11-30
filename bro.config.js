@@ -6,9 +6,12 @@ export default {
     }
   },
   /* use https://admin.bro-js.ru/ to create config, navigations and features */
+  navigations: {
+    'InnoCivic.main': '/innocivic',
+  },
   features: {
-    'innocivic': {
-      'main': '/innocivic'
+    'InnoCivic': {
+      // add your features here in the format [featureName]: { value: string }
     },
   },
   config: {
