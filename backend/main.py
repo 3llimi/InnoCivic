@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 DATASETS_FILE = os.path.join(DATA_DIR, "datasets.json")
 FILES_DIR = os.path.join(BASE_DIR, "datasets")
-MAX_FILE_SIZE_MB = 100
+MAX_FILE_SIZE_MB = 500
 ALLOWED_EXTENSIONS = {".csv", ".json", ".xml", ".xlsx", ".xls", ".pdf", ".tsv", ".zip"}
 
 
@@ -59,7 +59,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "https://ift-1.brojs.ru", "https://innocivicapi.ru"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
