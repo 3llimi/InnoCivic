@@ -7,7 +7,7 @@ import './index.css';
   
 import App from './App'
   
-export default () => <App/>
+export default App
 
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
@@ -36,4 +36,7 @@ export const unmount = () => {
   }
 }
 
-mount(App)
+// Auto-mount for development
+if (typeof window !== 'undefined') {
+  mount(App)
+}

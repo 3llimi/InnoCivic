@@ -2,7 +2,10 @@ export default {
   apiPath: 'stubs/api',
   webpackConfig: {
     output: {
-      publicPath: '/static/master/'
+      publicPath: '/static/innocivic/master/',
+      library: {
+        type: 'module'
+      }
     }
   },
   /* use https://admin.bro-js.ru/ to create config, navigations and features */
@@ -10,9 +13,7 @@ export default {
     'InnoCivic.main': '/innocivic',
   },
   features: {
-    'InnoCivic': {
-      // add your features here in the format [featureName]: { value: string }
-    },
+    'innocivic': {},
   },
   config: {
   }
