@@ -11,8 +11,7 @@ module.exports = {
     publicPath: "/static/innocivic/master/",
     library: {
       name: 'innocivic',
-      type: 'umd',
-      export: 'default'
+      type: 'umd'
     }
   },
 

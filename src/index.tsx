@@ -35,14 +35,20 @@ export const unmount = () => {
 }
 
 // Bro.js feature export
-export const innocivic = {
+const innocivic = {
   mount: (element?: HTMLElement) => mount(App, element),
   unmount,
-  App
+  default: App
 };
 
-// Default export for backward compatibility
-export default App
+// Export everything for Bro.js
+export { mount, unmount };
+export default App;
+
+// Make it available globally for Bro.js
+if (typeof window !== 'undefined') {
+  (window as any).innocivic = innocivic;
+}
 
 // Auto-mount for development
 if (typeof window !== 'undefined') {
