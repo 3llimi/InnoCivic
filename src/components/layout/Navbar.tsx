@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SearchBar } from '../forms/SearchBar';
-import { Avatar } from '../data-display/Avatar';
-import { Dropdown } from '../utility/Dropdown';
-import { Button } from '../forms/Button';
 import { BaseComponentProps, User } from '../../types';
 import { useTheme } from '../../hooks/ThemeContext';
 import { useSidebar } from '../../hooks/SidebarContext';
 
 interface NavbarProps extends BaseComponentProps {
-  user?: User;
   onSearch?: (query: string) => void;
-  onLogin?: () => void;
-  onLogout?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  user,
   onSearch,
-  onLogin,
-  onLogout,
   className = '',
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,17 +25,11 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
-  const handleLogin = () => {
-    navigate('/innocivic/login');
-    onLogin?.();
-  };
-
   const userMenuItems = [
     { label: 'Dashboard', href: '/innocivic/dashboard' },
     { label: 'My Datasets', href: '/innocivic/dashboard' },
     { label: 'Settings', href: '/settings' },
     { label: 'Help', href: '/help' },
-    { label: 'Logout', onClick: () => { onLogout?.(); navigate('/'); }, divider: true },
   ];
 
   return (
@@ -82,42 +67,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               onSearch={handleSearch}
               value={searchQuery}
             />
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center space-x-4">
-            <ThemeToggleButton />
-            {user ? (
-              <Dropdown
-                trigger={
-                  <button className="flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <Avatar user={user} size="sm" />
-                    <span className="hidden md:block text-gray-700 dark:text-gray-300">{user.fullName}</span>
-                    <svg className="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                }
-                items={userMenuItems}
-              />
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="ghost"
-                  onClick={handleLogin}
-                  className="text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Login
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={handleLogin}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  Sign Up
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

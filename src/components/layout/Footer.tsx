@@ -9,26 +9,26 @@ export const Footer: React.FC<FooterProps> = ({
   showFullFooter = true,
   className = '',
 }) => {
-  const footerLinks = {
-    platform: [
-      { label: 'About', href: '/about' },
-      { label: 'Features', href: '/features' },
-      { label: 'API', href: '/api-docs' },
-      { label: 'Help', href: '/help' },
-    ],
-    community: [
-      { label: 'Contributors', href: '/contributors' },
-      { label: 'Guidelines', href: '/guidelines' },
-      { label: 'Discord', href: 'https://discord.gg/innocivic' },
-      { label: 'GitHub', href: 'https://github.com/innocivic' },
-    ],
-    legal: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Data License', href: '/license' },
-      { label: 'Contact', href: '/contact' },
-    ],
-  };
+  // const footerLinks = {
+  //   platform: [
+  //     { label: 'About', href: '/about' },
+  //     { label: 'Features', href: '/features' },
+  //     { label: 'API', href: '/api-docs' },
+  //     { label: 'Help', href: '/help' },
+  //   ],
+  //   community: [
+  //     { label: 'Contributors', href: '/contributors' },
+  //     { label: 'Guidelines', href: '/guidelines' },
+  //     { label: 'Discord', href: 'https://discord.gg/innocivic' },
+  //     { label: 'GitHub', href: 'https://github.com/innocivic' },
+  //   ],
+  //   legal: [
+  //     { label: 'Privacy Policy', href: '/privacy' },
+  //     { label: 'Terms of Service', href: '/terms' },
+  //     { label: 'Data License', href: '/license' },
+  //     { label: 'Contact', href: '/contact' },
+  //   ],
+  // };
 
   if (!showFullFooter) {
     return (
@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           {/* Platform Links */}
-          <div>
+          {/* <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Platform</h3>
             <ul className="mt-4 space-y-2">
               {footerLinks.platform.map((link) => (
@@ -93,10 +93,10 @@ export const Footer: React.FC<FooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Community Links */}
-          <div>
+          {/* <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Community</h3>
             <ul className="mt-4 space-y-2">
               {footerLinks.community.map((link) => (
@@ -112,10 +112,10 @@ export const Footer: React.FC<FooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           {/* Legal Links */}
-          <div>
+          {/* <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Legal</h3>
             <ul className="mt-4 space-y-2">
               {footerLinks.legal.map((link) => (
@@ -129,7 +129,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Bar */}
@@ -145,5 +145,5 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
       </div>
     </footer>
-  );
+    );
 };

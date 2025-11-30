@@ -9,7 +9,7 @@
     "build": "webpack --config webpack.config.cjs --mode production",
     "build:prod": "webpack --config webpack.config.cjs --mode production",
     "lint": "eslint . --ext .ts,.tsx",
-    "preview": "npx serve -s dist"
+    "preview": "npx serve -s dist -l 5173"
   },
   "dependencies": {
     "@brojs/cli": "^1.9.5",

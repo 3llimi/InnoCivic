@@ -8,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "index.js",
     clean: true,
-    publicPath: "/static/innocivic/master/",
+    publicPath: "/", // "/static/innocivic/master/"
     library: {
       name: 'innocivic',
       type: 'umd'

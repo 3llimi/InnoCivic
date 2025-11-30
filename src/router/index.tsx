@@ -3,10 +3,6 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { HomePage } from '../pages/HomePage';
 import { DatasetCatalogPage } from '../pages/DatasetCatalogPage';
 import { DatasetDetailPage } from '../pages/DatasetDetailPage';
-import { UserDashboardPage } from '../pages/UserDashboardPage';
-import { LoginPage } from '../pages/LoginPage';
-import { SignupPage } from '../pages/SignupPage';
-import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 import { VisualizationsPage } from '../pages/VisualizationsPage';
 import { UploadPage } from '../pages/UploadPage';
 import { CategoriesPage } from '../pages/CategoriesPage';
@@ -24,22 +20,6 @@ const router = createBrowserRouter([
   {
     path: '/innocivic/datasets/:id',
     element: <DatasetDetailPage />,
-  },
-  {
-    path: '/innocivic/dashboard',
-    element: <UserDashboardPage />,
-  },
-  {
-    path: '/innocivic/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/innocivic/register',
-    element: <SignupPage />,
-  },
-  {
-    path: '/innocivic/forgot-password',
-    element: <ForgotPasswordPage />,
   },
   {
     path: '/innocivic/categories',
