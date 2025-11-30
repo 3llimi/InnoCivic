@@ -66,9 +66,9 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def redirect_to_app() -> RedirectResponse:
-    return RedirectResponse("http://localhost:5173/", status_code=307)
+# @app.get("/")
+# async def redirect_to_app() -> RedirectResponse:
+#     return RedirectResponse("http://localhost:5173/", status_code=307)
 
 
 @app.get("/api/health")
