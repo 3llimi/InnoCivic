@@ -4,7 +4,8 @@ export default {
     output: {
       publicPath: '/static/innocivic/master/',
       library: {
-        type: 'module'
+        name: 'innocivic',
+        type: 'umd'
       }
     }
   },

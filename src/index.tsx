@@ -41,8 +41,7 @@ const innocivic = {
   default: App
 };
 
-// Export everything for Bro.js
-export { mount, unmount };
+// Default export for backward compatibility
 export default App;
 
 // Make it available globally for Bro.js
