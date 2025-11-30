@@ -4,10 +4,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css';
-  
+
 import App from './App'
-  
-export default App
 
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
@@ -35,6 +33,16 @@ export const unmount = () => {
     root = null
   }
 }
+
+// Bro.js feature export
+export const innocivic = {
+  mount: (element?: HTMLElement) => mount(App, element),
+  unmount,
+  App
+};
+
+// Default export for backward compatibility
+export default App
 
 // Auto-mount for development
 if (typeof window !== 'undefined') {
