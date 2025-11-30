@@ -9,8 +9,6 @@ import App from './App'
   
 export default () => <App/>
 
-
-  
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
 const rootElement = document.getElementById("root");
