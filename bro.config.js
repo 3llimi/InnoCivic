@@ -2,7 +2,7 @@ export default {
   apiPath: 'stubs/api',
   webpackConfig: {
     output: {
-      publicPath: `/static/innocivic/1.1.8/`
+      publicPath: '/static/innocivic/master/'
     }
   },
   /* use https://admin.bro-js.ru/ to create config, navigations and features */
