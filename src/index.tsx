@@ -8,12 +8,20 @@ import './index.css';
 import App from './App'
 
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
+let historyPush: any = null;
 
 const rootElement = document.getElementById("root");
 
-const mount = (Component: React.ComponentType, element = document.getElementById('app')) => {
+// Bro.js calls mount like: mount(component.default, element, {push: historyPush})
+const mount = (Component: React.ComponentType, element: HTMLElement, options?: {push?: any}) => {
   const mountEl = element || rootElement;
   if (!mountEl) throw new Error('Root element not found');
+
+  // Store the history push function if provided
+  if (options?.push) {
+    historyPush = options.push;
+  }
+
   root = ReactDOM.createRoot(mountEl)
   root.render(<Component/>)
 
@@ -37,7 +45,7 @@ const unmount = () => {
 // Bro.js expects this exact structure
 const moduleExports = {
   component: App,
-  mount: (element?: HTMLElement) => mount(App, element),
+  mount: mount,
   unmount: unmount,
   default: App
 };
@@ -50,7 +58,7 @@ if (typeof window !== 'undefined') {
   (window as any).innocivic = moduleExports;
 }
 
-// Auto-mount for development
-if (typeof window !== 'undefined') {
-  mount(App)
+// Auto-mount for development (only if not in Bro.js environment)
+if (typeof window !== 'undefined' && !(window as any).fireapp) {
+  mount(App, rootElement!)
 }
