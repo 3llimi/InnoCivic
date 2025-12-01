@@ -11,7 +11,7 @@ let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
 
 const rootElement = document.getElementById("root");
 
-export const mount = (Component: React.ComponentType, element = document.getElementById('app')) => {
+const mount = (Component: React.ComponentType, element = document.getElementById('app')) => {
   const mountEl = element || rootElement;
   if (!mountEl) throw new Error('Root element not found');
   root = ReactDOM.createRoot(mountEl)
@@ -27,26 +27,27 @@ export const mount = (Component: React.ComponentType, element = document.getElem
   }
 }
 
-export const unmount = () => {
+const unmount = () => {
   if (root) {
     root.unmount()
     root = null
   }
 }
 
-// Bro.js feature export
-const innocivic = {
+// Bro.js expects this exact structure
+const moduleExports = {
+  component: App,
   mount: (element?: HTMLElement) => mount(App, element),
-  unmount,
+  unmount: unmount,
   default: App
 };
 
-// Default export for backward compatibility
-export default App;
+// Export as default - this is what Bro.js will import
+export default moduleExports;
 
-// Make it available globally for Bro.js
+// Make it available globally for Bro.js SystemJS
 if (typeof window !== 'undefined') {
-  (window as any).innocivic = innocivic;
+  (window as any).innocivic = moduleExports;
 }
 
 // Auto-mount for development
