@@ -8,20 +8,12 @@ import './index.css';
 import App from './App'
 
 let root: ReturnType<typeof ReactDOM.createRoot> | null = null;
-let historyPush: any = null;
 
 const rootElement = document.getElementById("root");
 
-// Bro.js calls mount like: mount(component.default, element, {push: historyPush})
-const mount = (Component: React.ComponentType, element: HTMLElement, options?: {push?: any}) => {
+const mount = (Component: React.ComponentType, element = document.getElementById('app')) => {
   const mountEl = element || rootElement;
   if (!mountEl) throw new Error('Root element not found');
-
-  // Store the history push function if provided
-  if (options?.push) {
-    historyPush = options.push;
-  }
-
   root = ReactDOM.createRoot(mountEl)
   root.render(<Component/>)
 
@@ -42,23 +34,25 @@ const unmount = () => {
   }
 }
 
-// Bro.js expects this exact structure
-const moduleExports = {
-  component: App,
-  mount: mount,
-  unmount: unmount,
-  default: App
-};
+// Export for Bro.js - it looks for these specific properties
+export { mount, unmount };
+export default App;
 
-// Export as default - this is what Bro.js will import
-export default moduleExports;
-
-// Make it available globally for Bro.js SystemJS
+// Make it available globally for Bro.js
 if (typeof window !== 'undefined') {
-  (window as any).innocivic = moduleExports;
+  (window as any).innocivic = {
+    mount: (component: any, element: HTMLElement, options?: any) => {
+      // Bro.js calls mount(component.default, element, {push: ...})
+      const Component = component?.default || component || App;
+      return mount(Component, element);
+    },
+    unmount: unmount,
+    component: App,
+    default: App
+  };
 }
 
-// Auto-mount for development (only if not in Bro.js environment)
-if (typeof window !== 'undefined' && !(window as any).fireapp) {
-  mount(App, rootElement!)
+// Auto-mount for development
+if (typeof window !== 'undefined') {
+  mount(App)
 }
