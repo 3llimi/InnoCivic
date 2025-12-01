@@ -8,34 +8,69 @@ InnoCivic is a web platform that centralizes and enriches both official and user
 
 We make public data **easy to find, visualize, and analyze**, solving the challenge of fragmented or outdated information across Russia.
 
-## ✨ Features
+## ✨ Features (implemented)
 
-- **Centralized Access** - Official and community-contributed datasets
-- **Smart Search** - Advanced search and discovery across multiple domains
-- **Interactive Visualizations** - Charts, maps, and timelines
-- **User Contributions** - Versioning and attribution system
-- **AI-Powered** - Auto-tagging and dataset summarization
-- **Quality Control** - Anomaly detection and smart visualization suggestions
-- **Mobile-First** - Fully responsive design optimized for all devices
+- **Dataset catalog** – Browse public datasets with search, filters, and rich metadata
+- **Live statistics** – Overview of dataset counts, categories, downloads, and views on the home dashboard
+- **Categories view** – Category grid with dataset counts and quick navigation into filtered results
+- **Dataset detail view** – Download links, metadata, and an automatic metadata-based summary panel
+- **Dataset upload flow** – File upload with format validation, size limits, and rich metadata entry
+- **Basic visualizations** – Recharts-based bar charts and a Leaflet map component wired into the UI
+- **User dashboard (mocked)** – Example dashboard page showing how user stats and activity could look
+- **Dark mode–friendly UI** – Tailwind-based layout and components that support light/dark themes
+- **FastAPI backend** – Simple API for datasets, categories, and file uploads (see `backend/README.md`)
+
+## 🧭 Future plans
+
+These items are **not fully implemented yet** in the current codebase, but are part of the planned roadmap:
+
+- **AI-powered features**
+  - Automatic tag generation from dataset contents
+  - LLM-backed, interactive dataset chat instead of the current static “AI” summary bubble
+- **Quality & insights**
+  - Anomaly detection and basic data quality scoring beyond the current placeholder `qualityScore`
+  - Smart visualization suggestions based on dataset schema
+- **Richer visualizations**
+  - Additional chart types (line, pie, area, scatter) built on top of Recharts
+  - A reusable chart builder / visualization builder interface
+- **User & contributor experience**
+  - Real user accounts instead of mocked dashboard data
+  - Reputation, notification feeds, and detailed user stats backed by the API
+  - Multi-version dataset history and richer attribution beyond the current single `uploadedBy` + `version` fields
+- **Admin & governance**
+  - Admin dashboard for reviewing and moderating datasets
+  - Workflow for dataset approval/rejection instead of only client-side status flags
+- **Architecture & tooling**
+  - Migration from ad‑hoc data fetching to **TanStack Query** for server state
+  - Adopting **React Hook Form + Zod** across forms (the upload form currently uses custom state + validation)
+  - Introducing **Zustand** for shared client-side state where appropriate
+- **Accessibility & polish**
+  - Closing the remaining gaps to WCAG 2.1 AA compliance across all flows
+  - More exhaustive mobile testing and layout refinements
 
 ## 🏗️ Architecture
 
-### Frontend Stack
+### Frontend stack (current)
 - **React 18** with TypeScript
-- **Vite** for build tooling
-- **Tailwind CSS** for styling
-- **Recharts** for data visualization
-- **Leaflet** for interactive maps
-- **React Router** for navigation
-- **React Hook Form + Zod** for form management
-- **TanStack Query** for server state
-- **Zustand** for global state
+- **Webpack 5** for bundling and dev server
+- **Tailwind CSS** utility classes for styling
+- **Recharts** for data visualizations (bar charts)
+- **React Leaflet + Leaflet** for interactive maps
+- **React Router v6** for routing
+- **Custom API client** in `src/services/api.ts` for talking to the backend
+- **BroJS CLI** for component scaffolding and dev utilities
 
-### Component Architecture
-- **35 Shared Components** - Layout, navigation, forms, feedback
-- **50+ Feature Components** - Dataset, visualization, search, user features
-- **15 Page Components** - Home, catalog, detail, dashboard pages
-- **Comprehensive TypeScript** - Full type safety throughout
+### Backend (current)
+- **FastAPI** service in the `backend/` folder
+- JSON-based metadata storage (`backend/data/datasets.json`)
+- File storage under `backend/datasets/...` with upload size limits
+- Dataset listing, detail, download, and category summary endpoints
+
+### Component architecture
+- **Shared components** – Layout, navigation, forms, feedback, data display, and utilities
+- **Feature components** – Dataset catalog, upload, search, visualizations, and user dashboard
+- **Page components** – Home, catalog, detail, upload, categories, user dashboard, auth pages
+- **TypeScript-first** domain and UI types in `src/types/`
 
 ## 🚀 Getting Started
 
