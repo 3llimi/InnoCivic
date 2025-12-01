@@ -53,7 +53,80 @@ const sortDatasets = (items: Dataset[], sort: string) => {
     );
   }
 
+  if (sort === 'name') {
+    return cloned.sort((a, b) =>
+      (a.title || '').localeCompare(b.title || '', 'ru-RU', { sensitivity: 'base' }),
+    );
+  }
+
+  if (sort === 'size') {
+    return cloned.sort(
+      (a, b) => (a.fileSize ?? 0) - (b.fileSize ?? 0),
+    );
+  }
+
   return cloned;
+};
+
+const ONE_MB = 1024 * 1024;
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+
+const filterDatasets = (
+  items: Dataset[],
+  sizeFilters: { small: boolean; medium: boolean; large: boolean },
+  qualityFilters: { high: boolean; medium: boolean; low: boolean },
+  dateFilters: { last7days: boolean; last30days: boolean; lastYear: boolean },
+) => {
+  const hasSizeFilter = sizeFilters.small || sizeFilters.medium || sizeFilters.large;
+  const hasQualityFilter = qualityFilters.high || qualityFilters.medium || qualityFilters.low;
+  const hasDateFilter = dateFilters.last7days || dateFilters.last30days || dateFilters.lastYear;
+
+  const now = Date.now();
+
+  return items.filter((dataset) => {
+    let passesSize = true;
+    if (hasSizeFilter) {
+      const size = dataset.fileSize ?? 0;
+      const isSmall = size > 0 && size < ONE_MB;
+      const isMedium = size >= ONE_MB && size <= 10 * ONE_MB;
+      const isLarge = size > 10 * ONE_MB;
+
+      passesSize =
+        (sizeFilters.small && isSmall) ||
+        (sizeFilters.medium && isMedium) ||
+        (sizeFilters.large && isLarge);
+    }
+
+    let passesQuality = true;
+    if (hasQualityFilter) {
+      const score = dataset.qualityScore ?? 0;
+      const isHigh = score >= 8;
+      const isMediumQuality = score >= 6 && score < 8;
+      const isLow = score >= 4 && score < 6;
+
+      passesQuality =
+        (qualityFilters.high && isHigh) ||
+        (qualityFilters.medium && isMediumQuality) ||
+        (qualityFilters.low && isLow);
+    }
+
+    let passesDate = true;
+    if (hasDateFilter) {
+      const dateValue = parseDate(dataset.uploadedAt || dataset.lastUpdated);
+      const within7Days = dateValue >= now - SEVEN_DAYS_MS;
+      const within30Days = dateValue >= now - THIRTY_DAYS_MS;
+      const withinYear = dateValue >= now - ONE_YEAR_MS;
+
+      passesDate =
+        (dateFilters.last7days && within7Days) ||
+        (dateFilters.last30days && within30Days) ||
+        (dateFilters.lastYear && withinYear);
+    }
+
+    return passesSize && passesQuality && passesDate;
+  });
 };
 
 export const DatasetCatalogPage: React.FC = () => {
@@ -133,8 +206,11 @@ export const DatasetCatalogPage: React.FC = () => {
       selectedFormat,
       sortBy,
       currentPage,
+      sizeFilters,
+      qualityFilters,
+      dateFilters,
     }),
-    [searchQuery, selectedCategory, selectedFormat, sortBy, currentPage],
+    [searchQuery, selectedCategory, selectedFormat, sortBy, currentPage, sizeFilters, qualityFilters, dateFilters],
   );
 
   useEffect(() => {
@@ -161,7 +237,8 @@ export const DatasetCatalogPage: React.FC = () => {
         const response = await fetchDatasets(params);
         if (response?.success) {
           const items = Array.isArray(response.data) ? response.data : [];
-          const sortedItems = sortDatasets(items, sortBy);
+          const filteredItems = filterDatasets(items, sizeFilters, qualityFilters, dateFilters);
+          const sortedItems = sortDatasets(filteredItems, sortBy);
           setDatasets(sortedItems);
           const pagination = (response as Record<string, any>).pagination;
           if (pagination?.total !== undefined) {
