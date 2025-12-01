@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
 import { DatasetDetail } from '../features/datasets/components/DatasetDetail';
+import { DatasetChatSummary } from '../features/datasets/components/DatasetChatSummary';
 import { Loader } from '../components/feedback/Loader';
 import { Alert } from '../components/feedback/Alert';
 import { Dataset } from '../types';
@@ -126,13 +127,20 @@ export const DatasetDetailPage: React.FC = () => {
           onNavigate={(href) => navigate(href)}
         />
 
-        <DatasetDetail
-          dataset={dataset}
-          onDownload={handleDownload}
-          onShare={handleShare}
-          onRate={handleRate}
-          onComment={handleComment}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          <div className="lg:col-span-2">
+            <DatasetDetail
+              dataset={dataset}
+              onDownload={handleDownload}
+              onShare={handleShare}
+              onRate={handleRate}
+              onComment={handleComment}
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <DatasetChatSummary dataset={dataset} />
+          </div>
+        </div>
       </div>
     </AppLayout>
   );
