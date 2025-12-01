@@ -47,6 +47,7 @@ export interface Category {
   icon: string;
   parentId?: string;
   children?: Category[];
+  datasetCount?: number;
 }
 
 export interface Visualization {

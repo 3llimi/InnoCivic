@@ -196,9 +196,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </aside>
 
       <aside
-        className={`hidden lg:flex flex-col flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 h-[calc(100vh-4rem)] sticky top-16 ${
+        className={`hidden lg:flex flex-col flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 sticky ${
           isCollapsed ? 'w-16' : 'w-64'
         } ${className}`}
+        style={{
+          top: 'var(--navbar-height, 64px)',
+          height: 'calc(100vh - var(--navbar-height, 64px))',
+        }}
       >
         <SidebarContent
           collapsed={isCollapsed}

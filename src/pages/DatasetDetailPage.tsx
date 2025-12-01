@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AppLayout } from '../components/layout/AppLayout';
 import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
 import { DatasetDetail } from '../features/datasets/components/DatasetDetail';
@@ -10,6 +10,7 @@ import { fetchDatasetById, API_BASE_URL } from '../services/api';
 
 export const DatasetDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,13 +45,6 @@ export const DatasetDetailPage: React.FC = () => {
       fetchDataset();
     }
   }, [id]);
-
-  const breadcrumbItems = [
-    { label: 'Home', href: '/innocivic' },
-    { label: 'Datasets', href: '/innocivic/datasets' },
-    { label: dataset?.category.name || 'Category', href: `/innocivic/datasets?category=${dataset?.category.name}` },
-    { label: dataset?.title || 'Dataset', current: true },
-  ];
 
   const handleDownload = (datasetId: string) => {
     if (!datasetId) {
@@ -112,10 +106,25 @@ export const DatasetDetailPage: React.FC = () => {
     );
   }
 
+  const breadcrumbItems = [
+    { label: 'Home', href: '/innocivic' },
+    { label: 'Categories', href: '/innocivic/categories' },
+    dataset.category?.name
+      ? {
+          label: dataset.category.name,
+          href: `/innocivic/datasets?category=${dataset.category.id || dataset.category.name}`,
+        }
+      : { label: 'Datasets', href: '/innocivic/datasets' },
+    { label: dataset.title, current: true },
+  ];
+
   return (
     <AppLayout>
       <div className="space-y-6">
-        <Breadcrumbs items={breadcrumbItems} />
+        <Breadcrumbs
+          items={breadcrumbItems}
+          onNavigate={(href) => navigate(href)}
+        />
 
         <DatasetDetail
           dataset={dataset}

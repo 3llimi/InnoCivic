@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SearchBar } from '../forms/SearchBar';
 import { BaseComponentProps, User } from '../../types';
@@ -14,14 +14,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   className = '',
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const headerRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
   const { toggleMobileSidebar } = useSidebar();
+
+  useEffect(() => {
+    const updateNavbarHeight = () => {
+      if (headerRef.current) {
+        document.documentElement.style.setProperty(
+          '--navbar-height',
+          `${headerRef.current.offsetHeight}px`,
+        );
+      }
+    };
+
+    updateNavbarHeight();
+    window.addEventListener('resize', updateNavbarHeight);
+    return () => window.removeEventListener('resize', updateNavbarHeight);
+  }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     onSearch?.(query);
     if (query.trim()) {
-      navigate(`/innocivic/search?q=${encodeURIComponent(query)}`);
+      navigate(`/innocivic/datasets?q=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -33,7 +49,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className={`bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 ${className}`}>
+    <header
+      ref={headerRef}
+      className={`bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 ${className}`}
+    >
       <div className="px-4 sm:px-6 lg:px-8 max-w-full">
         <div className="flex flex-wrap items-center gap-4 py-3 lg:py-0">
           {/* Left side */}
@@ -48,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </svg>
             </button>
 
-            <Link to="/" className="flex items-center ml-3 sm:ml-4 min-w-0">
+            <Link to="/innocivic" className="flex items-center ml-3 sm:ml-4 min-w-0">
               <img
                 className="h-8 w-auto"
                 src="/logo.svg"
@@ -69,8 +88,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="w-full order-3 lg:order-none lg:flex-1 lg:max-w-lg">
             <SearchBar
               placeholder="Search datasets, categories, tags..."
-              onSearch={handleSearch}
               value={searchQuery}
+              onChange={setSearchQuery}
+              onSearch={handleSearch}
               className="w-full"
             />
           </div>

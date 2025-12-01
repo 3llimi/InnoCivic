@@ -10,6 +10,10 @@ import { ErrorBoundary } from '../components/feedback/ErrorBoundary';
 
 const router = createBrowserRouter([
   {
+    path: '/',
+    element: <Navigate to="/innocivic" replace />,
+  },
+  {
     path: '/innocivic',
     element: <HomePage />,
   },

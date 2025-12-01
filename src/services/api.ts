@@ -1,4 +1,4 @@
-import type { Dataset } from '../types';
+import type { Dataset, Category } from '../types';
 
 const DEFAULT_API_BASE_URL = 'http://localhost:8000';
 
@@ -29,7 +29,7 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 
 export const fetchCategories = async () => {
   const response = await fetch(`${API_BASE_URL}/api/categories`);
-  return handleResponse<ApiResponse<any[]>>(response);
+  return handleResponse<ApiResponse<Category[]>>(response);
 };
 
 export interface UploadDatasetFileParams {
@@ -99,5 +99,3 @@ export const fetchDatasetById = async (datasetId: string) => {
   const response = await fetch(`${API_BASE_URL}/api/datasets/${encodeURIComponent(datasetId)}`);
   return handleResponse<ApiResponse<Dataset>>(response);
 };
-
-

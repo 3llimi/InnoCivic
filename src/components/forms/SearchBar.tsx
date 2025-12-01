@@ -22,7 +22,7 @@ interface SearchBarProps extends BaseComponentProps {
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = 'Search...',
-  value = '',
+  value,
   onChange,
   onSearch,
   suggestions = [],
@@ -33,12 +33,22 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   maxSuggestions = 10,
   className = '',
 }) => {
+  const [internalValue, setInternalValue] = useState(value ?? '');
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
+  const controlledValue = value !== undefined;
+  const inputValue = controlledValue ? value! : internalValue;
+
   const filteredSuggestions = suggestions.slice(0, maxSuggestions);
+
+  useEffect(() => {
+    if (controlledValue) {
+      setInternalValue(value ?? '');
+    }
+  }, [controlledValue, value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,6 +68,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    setInternalValue(newValue);
     onChange?.(newValue);
     setIsOpen(newValue.length > 0 && showSuggestions);
     setFocusedIndex(-1);
@@ -66,7 +77,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isOpen || filteredSuggestions.length === 0) {
       if (e.key === 'Enter') {
-        onSearch?.(value);
+        onSearch?.(inputValue);
         setIsOpen(false);
       }
       return;
@@ -88,7 +99,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         if (focusedIndex >= 0) {
           handleSuggestionSelect(filteredSuggestions[focusedIndex]);
         } else {
-          onSearch?.(value);
+          onSearch?.(inputValue);
           setIsOpen(false);
         }
         break;
@@ -108,7 +119,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const handleInputFocus = () => {
-    if (value.length > 0 && showSuggestions) {
+    if (inputValue.length > 0 && showSuggestions) {
       setIsOpen(true);
     }
   };
@@ -143,7 +154,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           ref={inputRef}
           type="text"
           placeholder={placeholder}
-          value={value}
+          value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={handleInputFocus}
