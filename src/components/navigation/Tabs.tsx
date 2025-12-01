@@ -67,9 +67,12 @@ export const Tabs: React.FC<TabsProps> = ({
 
   const activeTabContent = items.find(item => item.id === activeTab)?.content;
 
+  const tabListClasses = `${getTabListClasses()} ${fullWidth ? '' : 'min-w-max'}`;
+
   return (
     <div className={className}>
-      <div className={getTabListClasses()} role="tablist">
+      <div className={`overflow-x-auto ${fullWidth ? '' : '-mx-1 px-1'}`}>
+        <div className={tabListClasses} role="tablist">
         {items.map((item) => (
           <button
             key={item.id}
@@ -91,6 +94,7 @@ export const Tabs: React.FC<TabsProps> = ({
             </div>
           </button>
         ))}
+        </div>
       </div>
 
       {activeTabContent && (

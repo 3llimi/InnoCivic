@@ -234,10 +234,11 @@ export const DatasetCatalogPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center justify-center lg:justify-end space-x-4">
+          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="lg:hidden px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+              className="lg:hidden w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+              aria-expanded={showFilters}
             >
               Filters
             </button>
@@ -279,7 +280,7 @@ export const DatasetCatalogPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 w-full lg:w-auto">
               <Select
                 options={categories}
                 value={selectedCategory}
@@ -315,9 +316,8 @@ export const DatasetCatalogPage: React.FC = () => {
           </div>
 
           {/* Advanced Filters */}
-          {(showFilters || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className={`${showFilters ? 'block' : 'hidden'} lg:block mt-6 pt-6 border-t border-gray-200 dark:border-gray-700`}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">File Size</h4>
                   <div className="space-y-2">
@@ -381,8 +381,7 @@ export const DatasetCatalogPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Tabs */}
@@ -394,7 +393,7 @@ export const DatasetCatalogPage: React.FC = () => {
 
         {/* Results */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               {loading
                 ? 'Loading datasets...'

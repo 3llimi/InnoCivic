@@ -31,8 +31,8 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   };
 
   return (
-    <nav className={`flex ${className}`} aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2">
+    <nav className={`flex overflow-x-auto whitespace-nowrap no-scrollbar ${className}`} aria-label="Breadcrumb">
+      <ol className="flex items-center space-x-2 min-w-max">
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
             {index > 0 && (

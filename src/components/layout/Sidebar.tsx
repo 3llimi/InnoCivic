@@ -61,88 +61,151 @@ const navigationItems: NavItem[] = [
   },
 ];
 
+interface SidebarContentProps {
+  collapsed: boolean;
+  currentPath: string;
+  onCollapseToggle?: () => void;
+  onCloseMobile?: () => void;
+  onLinkClick?: () => void;
+  showCollapseToggle?: boolean;
+}
+
+const SidebarContent: React.FC<SidebarContentProps> = ({
+  collapsed,
+  currentPath,
+  onCollapseToggle,
+  onCloseMobile,
+  onLinkClick,
+  showCollapseToggle = true,
+}) => {
+  return (
+    <div className="flex flex-col h-full bg-white dark:bg-gray-800">
+      <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} p-4 border-b border-gray-200 dark:border-gray-700`}>
+        {!collapsed && (
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Navigation</h2>
+        )}
+        <div className="flex items-center gap-1">
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="p-1.5 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
+              aria-label="Close navigation menu"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+          {showCollapseToggle && onCollapseToggle && (
+            <button
+              onClick={onCollapseToggle}
+              className="p-1.5 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition"
+              title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              {collapsed ? (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              ) : (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              )}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+        {navigationItems.map((item) => {
+          const isActive = currentPath === item.href;
+          return (
+            <Link
+              key={item.href}
+              to={item.href}
+              onClick={() => onLinkClick?.()}
+              className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
+                collapsed ? 'justify-center' : 'justify-start'
+              } ${
+                isActive
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
+              }`}
+              title={collapsed ? item.label : undefined}
+            >
+              <span className={`${collapsed ? 'mr-0' : 'mr-3'} ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'}`}>
+                {item.icon}
+              </span>
+              {!collapsed && (
+                <>
+                  <span className="flex-1 dark:text-gray-200">{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-3 inline-block py-0.5 px-2 text-xs font-medium bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900/40 dark:text-blue-300">
+                      {item.badge}
+                    </span>
+                  )}
+                </>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {!collapsed && (
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            <p>InnoCivic v1.0.0</p>
+            <p>© 2025 Civic Data Platform</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({
   className = '',
 }) => {
   const location = useLocation();
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { isCollapsed, toggleSidebar, isMobileOpen, closeMobileSidebar } = useSidebar();
 
   return (
-    <div className={`bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 h-[calc(100vh-4rem)] sticky top-16 ${
-      isCollapsed ? 'w-16' : 'w-64'
-    } ${className}`}>
-      <div className="flex flex-col h-full">
-        {/* Header */}
-        <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-4 border-b border-gray-200 dark:border-gray-700`}>
-          {!isCollapsed && (
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Navigation</h2>
-          )}
-          <button
-            onClick={toggleSidebar}
-            className={`p-1.5 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-transform duration-300 ${
-              isCollapsed ? '' : ''
-            }`}
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isCollapsed ? (
-              // Right chevron to expand
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            ) : (
-              // Left chevron to collapse
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            )}
-          </button>
-        </div>
+    <>
+      <div
+        className={`fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
+          isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={closeMobileSidebar}
+        aria-hidden="true"
+      />
 
-        {/* Navigation */}
-        <nav className="flex-1 px-2 py-4 space-y-1">
-          {navigationItems.map((item) => {
-            const isActive = location.pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
-                  isCollapsed ? 'justify-center' : 'justify-start'
-                } ${
-                  isActive
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
-                }`}
-                title={isCollapsed ? item.label : undefined}
-              >
-                <span className={`${isCollapsed ? 'mr-0' : 'mr-3'} ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-300'}`}>
-                  {item.icon}
-                </span>
-                {!isCollapsed && (
-                  <>
-                    <span className="flex-1 dark:text-gray-200">{item.label}</span>
-                    {item.badge && (
-                      <span className="ml-3 inline-block py-0.5 px-2 text-xs font-medium bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900/40 dark:text-blue-300">
-                        {item.badge}
-                      </span>
-                    )}
-                  </>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-full transform transition-transform duration-300 lg:hidden ${
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        aria-hidden={!isMobileOpen}
+      >
+        <SidebarContent
+          collapsed={false}
+          currentPath={location.pathname}
+          onCloseMobile={closeMobileSidebar}
+          onLinkClick={closeMobileSidebar}
+          showCollapseToggle={false}
+        />
+      </aside>
 
-        {/* Footer */}
-        {!isCollapsed && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              <p>InnoCivic v1.0.0</p>
-              <p>© 2025 Civic Data Platform</p>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+      <aside
+        className={`hidden lg:flex flex-col flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 h-[calc(100vh-4rem)] sticky top-16 ${
+          isCollapsed ? 'w-16' : 'w-64'
+        } ${className}`}
+      >
+        <SidebarContent
+          collapsed={isCollapsed}
+          currentPath={location.pathname}
+          onCollapseToggle={toggleSidebar}
+        />
+      </aside>
+    </>
   );
 };

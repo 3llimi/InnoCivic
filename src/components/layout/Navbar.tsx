@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const { toggleSidebar } = useSidebar();
+  const { toggleMobileSidebar } = useSidebar();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -35,19 +35,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className={`bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 ${className}`}>
       <div className="px-4 sm:px-6 lg:px-8 max-w-full">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex flex-wrap items-center gap-4 py-3 lg:py-0">
           {/* Left side */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-1 min-w-0">
             <button
-              onClick={toggleSidebar}
-              className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:text-gray-500 dark:hover:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
+              onClick={toggleMobileSidebar}
+              className="p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800 lg:hidden"
+              aria-label="Open navigation menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
 
-            <Link to="/" className="flex items-center ml-4">
+            <Link to="/" className="flex items-center ml-3 sm:ml-4 min-w-0">
               <img
                 className="h-8 w-auto"
                 src="/logo.svg"
@@ -56,16 +57,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                   e.currentTarget.style.display = 'none';
                 }}
               />
-              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-gray-100">InnoCivic</span>
+              <span className="ml-2 text-xl font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap">InnoCivic</span>
             </Link>
           </div>
 
-          {/* Center - Search */}
-          <div className="flex-1 max-w-lg mx-4">
+          <div className="flex items-center gap-2 ml-auto">
+            <ThemeToggleButton />
+          </div>
+
+          {/* Search */}
+          <div className="w-full order-3 lg:order-none lg:flex-1 lg:max-w-lg">
             <SearchBar
               placeholder="Search datasets, categories, tags..."
               onSearch={handleSearch}
               value={searchQuery}
+              className="w-full"
             />
           </div>
         </div>
