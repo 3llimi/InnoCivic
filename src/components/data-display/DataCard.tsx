@@ -29,7 +29,7 @@ export const DataCard: React.FC<DataCardProps> = ({
   onClick,
 }) => {
   const getCardClasses = () => {
-    const baseClasses = 'bg-white dark:bg-gray-800 rounded-lg overflow-hidden';
+    const baseClasses = 'bg-white dark:bg-gray-800 rounded-lg overflow-hidden flex flex-col h-full';
     const variantClasses = {
       default: 'shadow-sm',
       elevated: 'shadow-lg',
@@ -97,7 +97,7 @@ export const DataCard: React.FC<DataCardProps> = ({
 
       {/* Content */}
       {children && (
-        <div className={`px-6 ${title || subtitle || actions ? 'pt-0 pb-4' : 'p-6'}`}>
+        <div className={`px-6 ${title || subtitle || actions ? 'pt-0 pb-4' : 'p-6'} flex-1`}>
           {children}
         </div>
       )}
