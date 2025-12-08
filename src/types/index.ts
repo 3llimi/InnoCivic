@@ -280,6 +280,53 @@ export interface RequestConfig {
   headers?: Record<string, string>;
 }
 
+// AI types
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: string;
+}
+
+export interface AIChatRequest {
+  messages: ChatMessage[];
+  dataset_context?: Record<string, any>;
+  system_prompt?: string;
+}
+
+export interface AIChatResponse {
+  success: boolean;
+  response: string;
+  model: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
+
+export interface DatasetInsightsRequest {
+  dataset: Record<string, any>;
+  preview_data?: any[];
+}
+
+export interface DatasetInsightsResponse {
+  success: boolean;
+  insights: string;
+  model: string;
+}
+
+export interface GenerateDescriptionRequest {
+  dataset: Record<string, any>;
+  preview_data?: any[];
+}
+
+export interface GenerateDescriptionResponse {
+  success: boolean;
+  description: string;
+  model: string;
+}
+
+
 // Theme types
 export interface Theme {
   colors: {

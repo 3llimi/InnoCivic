@@ -52,7 +52,7 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// Auto-mount for development
-if (typeof window !== 'undefined') {
-  mount(App)
+// Auto-mount only in development mode (local testing)
+if (process.env.NODE_ENV === 'development') {
+  mount(App, document.getElementById('app') || document.getElementById('root'));
 }

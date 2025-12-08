@@ -9,7 +9,7 @@ import { Checkbox } from '../components/forms/Checkbox';
 import { DatePicker } from '../components/forms/DatePicker';
 import { SubmitButton } from '../components/forms/SubmitButton';
 import { FileUpload } from '../components/forms/FileUpload';
-import { uploadDatasetFile, createDataset, fetchCategories } from '../services/api';
+import { uploadDatasetFile, createDataset, fetchCategories, generateDatasetDescription } from '../services/api';
 import { Dataset, UploadedFile } from '../types';
 
 interface CategoryOption {
@@ -82,6 +82,7 @@ export const UploadPage: React.FC = () => {
   const [createdDatasetId, setCreatedDatasetId] = useState<string | null>(null);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
 
   const acceptedTypes = useMemo(() => FORMAT_ACCEPT_MAP[formData.format] ?? ['*/*'], [formData.format]);
 
@@ -211,6 +212,51 @@ export const UploadPage: React.FC = () => {
       delete next.file;
       return next;
     });
+  };
+
+  const handleGenerateDescription = async () => {
+    if (!formData.title.trim()) {
+      setFormErrors({ ...formErrors, title: 'Title is required to generate description' });
+      return;
+    }
+
+    setGeneratingDescription(true);
+    try {
+      const selectedCategory =
+        categories.find((category) => category.id === formData.categoryId) ?? DEFAULT_CATEGORY;
+
+      const datasetContext = {
+        title: formData.title,
+        description: formData.description || '',
+        category: selectedCategory.name,
+        format: formData.format,
+        source: formData.source,
+        geographicCoverage: formData.geographicCoverage,
+        timePeriod: formData.startDate || formData.endDate ? {
+          start: formData.startDate || '',
+          end: formData.endDate || '',
+        } : undefined,
+        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
+        license: formData.license,
+      };
+
+      const response = await generateDatasetDescription({
+        dataset: datasetContext,
+        preview_data: [], // Could be enhanced to include actual file preview if needed
+      });
+
+      if (response?.success && response.description) {
+        setFormData(prev => ({
+          ...prev,
+          description: response.description,
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to generate description:', error);
+      // Could show an error message to user here
+    } finally {
+      setGeneratingDescription(false);
+    }
   };
 
   const validateForm = () => {
@@ -426,13 +472,45 @@ export const UploadPage: React.FC = () => {
                   error={formErrors.title}
                 />
 
-                <TextArea
-                  label="Description"
-                  placeholder="Describe the dataset contents, methodology, and any important context."
-                  rows={6}
-                  value={formData.description}
-                  onChange={(value) => handleInputChange('description', value)}
-                />
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Description
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleGenerateDescription}
+                      disabled={generatingDescription || !formData.title.trim()}
+                      className="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {generatingDescription ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-3 w-3 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="-ml-1 mr-2 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                          AI Generate
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <TextArea
+                    placeholder="Describe the dataset contents, methodology, and any important context."
+                    rows={6}
+                    value={formData.description}
+                    onChange={(value) => handleInputChange('description', value)}
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Use AI to generate a description based on your dataset title and metadata.
+                  </p>
+                </div>
 
                 <Select
                   label="Category"

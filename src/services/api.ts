@@ -1,8 +1,8 @@
 import type { Dataset, Category } from '../types';
 
-const DEFAULT_API_BASE_URL = 'http://localhost:8000';
+export const API_BASE_URL = 'http://localhost:8000';
 
-export const API_BASE_URL = 'https://innocivicapi.ru';
+// export const API_BASE_URL = 'https://innocivicapi.ru';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -98,4 +98,86 @@ export const fetchDatasets = async (params: DatasetQueryParams = {}) => {
 export const fetchDatasetById = async (datasetId: string) => {
   const response = await fetch(`${API_BASE_URL}/api/datasets/${encodeURIComponent(datasetId)}`);
   return handleResponse<ApiResponse<Dataset>>(response);
+};
+
+// AI-related API functions
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp?: string;
+}
+
+export interface AIChatRequest {
+  messages: ChatMessage[];
+  dataset_context?: Record<string, any>;
+  system_prompt?: string;
+}
+
+export interface AIChatResponse {
+  success: boolean;
+  response: string;
+  model: string;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
+
+export const sendAIChatMessage = async (request: AIChatRequest) => {
+  const response = await fetch(`${API_BASE_URL}/api/ai/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  return handleResponse<AIChatResponse>(response);
+};
+
+export interface DatasetInsightsRequest {
+  dataset: Record<string, any>;
+  preview_data?: any[];
+}
+
+export interface DatasetInsightsResponse {
+  success: boolean;
+  insights: string;
+  model: string;
+}
+
+export const generateDatasetInsights = async (request: DatasetInsightsRequest) => {
+  const response = await fetch(`${API_BASE_URL}/api/ai/dataset-insights`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  return handleResponse<DatasetInsightsResponse>(response);
+};
+
+export interface GenerateDescriptionRequest {
+  dataset: Record<string, any>;
+  preview_data?: any[];
+}
+
+export interface GenerateDescriptionResponse {
+  success: boolean;
+  description: string;
+  model: string;
+}
+
+export const generateDatasetDescription = async (request: GenerateDescriptionRequest) => {
+  const response = await fetch(`${API_BASE_URL}/api/ai/generate-description`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(request),
+  });
+
+  return handleResponse<GenerateDescriptionResponse>(response);
 };

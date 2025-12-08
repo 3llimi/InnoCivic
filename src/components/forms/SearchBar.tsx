@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BaseComponentProps } from '../../types';
-
-interface SearchSuggestion {
-  text: string;
-  type: 'dataset' | 'category' | 'tag' | 'user';
-  count?: number;
-}
+import { BaseComponentProps, SearchSuggestion } from '../../types';
 
 interface SearchBarProps extends BaseComponentProps {
   placeholder?: string;
@@ -130,6 +124,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       category: '🏷️',
       tag: '#',
       user: '👤',
+      ai: '🤖',
     };
     return icons[type as keyof typeof icons] || '🔍';
   };
