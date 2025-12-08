@@ -52,7 +52,4 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// Auto-mount for development
-if (typeof window !== 'undefined') {
-  mount(App)
-}
+// Don't auto-mount - let Bro.js handle mounting

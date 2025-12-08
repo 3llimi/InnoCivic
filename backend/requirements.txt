@@ -1,1 +1,4 @@
 fastapi[standard]
+gigachat
+python-dotenv
+httpx
