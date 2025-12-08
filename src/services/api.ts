@@ -1,8 +1,8 @@
 import type { Dataset, Category } from '../types';
 
-const DEFAULT_API_BASE_URL = 'http://localhost:8000';
+export const API_BASE_URL = 'http://localhost:8000';
 
-export const API_BASE_URL = 'https://innocivicapi.ru';
+// export const API_BASE_URL = 'https://innocivicapi.ru';
 
 interface ApiResponse<T> {
   success: boolean;

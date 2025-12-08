@@ -42,5 +42,95 @@
     "version": "1.0",
     "isPublic": true,
     "previewData": null
+  },
+  {
+    "id": "70d69782-1889-4d2b-ac8f-0ad99965e228",
+    "title": "test",
+    "description": "",
+    "category": {
+      "id": "general",
+      "name": "General",
+      "description": "General civic datasets",
+      "icon": null
+    },
+    "tags": [],
+    "format": "PDF",
+    "fileUrl": "/datasets/general/with-notes-programming-paradigms-fall-2025-lecture-5/2025-12-08/(with notes) Programming Paradigms Fall 2025 — Lecture 5.pdf",
+    "fileSize": 1381886,
+    "source": "(with notes) Programming Paradigms Fall 2025 — Lecture 5",
+    "license": "Open Data",
+    "geographicCoverage": "Russian Federation",
+    "timePeriod": {
+      "start": "2025-12-08",
+      "end": "2025-12-08"
+    },
+    "uploadedBy": {
+      "id": "anonymous-user",
+      "email": "anonymous@innocivic",
+      "username": "anonymous",
+      "fullName": "Anonymous Contributor",
+      "role": "contributor",
+      "userType": "other",
+      "createdAt": "2025-12-08T13:56:04.090Z",
+      "lastLoginAt": "2025-12-08T13:56:04.090Z"
+    },
+    "uploadedAt": "2025-12-08T13:56:04.096540Z",
+    "lastUpdated": "2025-12-08T13:56:04.096540Z",
+    "downloadCount": 0,
+    "viewCount": 0,
+    "qualityScore": 0,
+    "status": "pending",
+    "metadata": {
+      "originalFilename": "(with notes) Programming Paradigms Fall 2025 — Lecture 5.pdf",
+      "contentType": "application/pdf"
+    },
+    "version": "1.0",
+    "isPublic": true,
+    "previewData": null
+  },
+  {
+    "id": "2c995cdd-a756-4966-a8fe-1c1d3ec34128",
+    "title": "test2",
+    "description": "",
+    "category": {
+      "id": "general",
+      "name": "General",
+      "description": "General civic datasets",
+      "icon": null
+    },
+    "tags": [],
+    "format": "PDF",
+    "fileUrl": "/datasets/general/with-notes-programming-paradigms-fall-2025-lecture-5/2025-12-08/(with notes) Programming Paradigms Fall 2025 — Lecture 2.pdf",
+    "fileSize": 1981804,
+    "source": "(with notes) Programming Paradigms Fall 2025 — Lecture 5",
+    "license": "Open Data",
+    "geographicCoverage": "Russian Federation",
+    "timePeriod": {
+      "start": "2025-12-08",
+      "end": "2025-12-08"
+    },
+    "uploadedBy": {
+      "id": "anonymous-user",
+      "email": "anonymous@innocivic",
+      "username": "anonymous",
+      "fullName": "Anonymous Contributor",
+      "role": "contributor",
+      "userType": "other",
+      "createdAt": "2025-12-08T14:04:36.300Z",
+      "lastLoginAt": "2025-12-08T14:04:36.300Z"
+    },
+    "uploadedAt": "2025-12-08T14:04:36.314555Z",
+    "lastUpdated": "2025-12-08T14:04:36.314555Z",
+    "downloadCount": 0,
+    "viewCount": 0,
+    "qualityScore": 0,
+    "status": "pending",
+    "metadata": {
+      "originalFilename": "(with notes) Programming Paradigms Fall 2025 — Lecture 2.pdf",
+      "contentType": "application/pdf"
+    },
+    "version": "1.0",
+    "isPublic": true,
+    "previewData": null
   }
 ]

@@ -52,4 +52,7 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// Don't auto-mount - let Bro.js handle mounting
+// Auto-mount only in development mode (local testing)
+if (process.env.NODE_ENV === 'development') {
+  mount(App, document.getElementById('app') || document.getElementById('root'));
+}
