@@ -24,6 +24,10 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
   onView,
   className = '',
 }) => {
+  // Use hardcoded defaults if backend doesn't provide these fields
+  const isPaidDataset = dataset.isPaid ?? true;
+  const datasetPrice = dataset.price ?? 499;
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -50,16 +54,25 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
     <div className="flex items-center space-x-2">
       <button
         onClick={() => onView?.(dataset.id)}
-        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
       >
-        View
+        View Details
       </button>
-      <button
-        onClick={() => onDownload?.(dataset.id)}
-        className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-      >
-        Download
-      </button>
+      {isPaidDataset ? (
+        <button
+          onClick={() => onView?.(dataset.id)}
+          className="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-1 rounded text-sm hover:from-green-700 hover:to-green-800 flex items-center gap-1"
+        >
+        <span>₽{datasetPrice}</span>
+        </button>
+      ) : (
+        <button
+          onClick={() => onDownload?.(dataset.id)}
+          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+        >
+          Download
+        </button>
+      )}
     </div>
   ) : undefined;
 
@@ -84,28 +97,7 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
     </div>
   );
 
-  if (variant === 'compact') {
-    return (
-      <div
-        className={`p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer ${className}`}
-        onClick={() => onSelect?.(dataset.id)}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-gray-900 truncate">
-              {dataset.title}
-            </h3>
-            <p className="text-xs text-gray-500 mt-1">
-              {dataset.category.name} • {dataset.format} • {formatFileSize(dataset.fileSize)}
-            </p>
-          </div>
-          <Badge variant={getQualityColor(dataset.qualityScore)} size="sm">
-            {dataset.qualityScore}/10
-          </Badge>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <DataCard
@@ -114,11 +106,12 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
       actions={actions}
       footer={footer}
       hoverable
-      className={`text-left ${className}`}
+      className={`text-left relative ${className}`}
     >
+
       <div className="space-y-3">
         {/* Category and Format */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 flex-wrap">
           <Badge variant="primary" size="sm">
             {dataset.category.name}
           </Badge>
@@ -128,6 +121,11 @@ export const DatasetCard: React.FC<DatasetCardProps> = ({
           <Badge variant={getQualityColor(dataset.qualityScore)} size="sm">
             Quality: {dataset.qualityScore}/10
           </Badge>
+          {isPaidDataset && (
+            <Badge variant="success" size="sm">
+              Paid
+            </Badge>
+          )}
         </div>
 
         {/* Tags */}

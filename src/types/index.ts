@@ -38,6 +38,8 @@ export interface Dataset {
   version: string;
   isPublic: boolean;
   previewData?: any[];
+  isPaid?: boolean;    // Add this line
+  price?: number;      // Add this line
 }
 
 export interface Category {

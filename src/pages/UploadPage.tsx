@@ -36,14 +36,14 @@ const DATASET_FORMAT_OPTIONS = [
 ];
 
 const FORMAT_ACCEPT_MAP: Record<string, string[]> = {
-  CSV: ['.csv', 'text/csv', 'application/vnd.ms-excel'],
-  JSON: ['.json', 'application/json', 'text/json'],
-  XML: ['.xml', 'application/xml', 'text/xml'],
-  XLSX: ['.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-  XLS: ['.xls', 'application/vnd.ms-excel'],
-  PDF: ['.pdf', 'application/pdf'],
-  TSV: ['.tsv', 'text/tab-separated-values'],
-  ZIP: ['.zip', 'application/zip', 'application/x-zip-compressed'],
+  CSV: [ '.csv', 'text/csv', 'application/vnd.ms-excel' ],
+  JSON: [ '.json', 'application/json', 'text/json' ],
+  XML: [ '.xml', 'application/xml', 'text/xml' ],
+  XLSX: [ '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ],
+  XLS: [ '.xls', 'application/vnd.ms-excel' ],
+  PDF: [ '.pdf', 'application/pdf' ],
+  TSV: [ '.tsv', 'text/tab-separated-values' ],
+  ZIP: [ '.zip', 'application/zip', 'application/x-zip-compressed' ],
 };
 
 const DEFAULT_CATEGORY: CategoryOption = {
@@ -59,7 +59,7 @@ const normalizeSegment = (value: string) =>
     .replace(/^-+|-+$/g, '') || 'general';
 
 export const UploadPage: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [ formData, setFormData ] = useState({
     title: '',
     description: '',
     categoryId: '',
@@ -73,17 +73,21 @@ export const UploadPage: React.FC = () => {
     status: 'pending',
     isPublic: true,
   });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-  const [categories, setCategories] = useState<CategoryOption[]>([DEFAULT_CATEGORY]);
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
-  const [createdDatasetId, setCreatedDatasetId] = useState<string | null>(null);
-  const [loadingCategories, setLoadingCategories] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [ selectedFile, setSelectedFile ] = useState<File | null>(null);
+  const [ uploadedFiles, setUploadedFiles ] = useState<UploadedFile[]>([]);
+  const [ categories, setCategories ] = useState<CategoryOption[]>([ DEFAULT_CATEGORY ]);
+  const [ formErrors, setFormErrors ] = useState<Record<string, string>>({});
+  const [ submitError, setSubmitError ] = useState<string | null>(null);
+  const [ submitSuccess, setSubmitSuccess ] = useState<string | null>(null);
+  const [ createdDatasetId, setCreatedDatasetId ] = useState<string | null>(null);
+  const [ loadingCategories, setLoadingCategories ] = useState(false);
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
 
-  const acceptedTypes = useMemo(() => FORMAT_ACCEPT_MAP[formData.format] ?? ['*/*'], [formData.format]);
+  // Paid dataset states
+  const [ isPaidDataset, setIsPaidDataset ] = useState(false);
+  const [ datasetPrice, setDatasetPrice ] = useState('');
+
+  const acceptedTypes = useMemo(() => FORMAT_ACCEPT_MAP[ formData.format ] ?? [ '*/*' ], [ formData.format ]);
 
   const fileMatchesAcceptedTypes = (file: File, types: string[]) => {
     if (types.includes('*/*')) {
@@ -97,8 +101,8 @@ export const UploadPage: React.FC = () => {
         return type.toLowerCase() === fileExtension;
       }
       if (type.includes('*')) {
-        const [topLevel] = type.toLowerCase().split('/');
-        const [fileTopLevel] = file.type.toLowerCase().split('/');
+        const [ topLevel ] = type.toLowerCase().split('/');
+        const [ fileTopLevel ] = file.type.toLowerCase().split('/');
         return topLevel === fileTopLevel;
       }
       return file.type.toLowerCase() === type.toLowerCase();
@@ -112,11 +116,11 @@ export const UploadPage: React.FC = () => {
         const response = (await fetchCategories()) as CategoryApiResponse;
         if (response?.success && Array.isArray(response.data)) {
           const items = response.data.filter(Boolean) as CategoryOption[];
-          setCategories(items.length > 0 ? items : [DEFAULT_CATEGORY]);
+          setCategories(items.length > 0 ? items : [ DEFAULT_CATEGORY ]);
         }
       } catch (error) {
         console.warn('Failed to fetch categories:', error);
-        setCategories([DEFAULT_CATEGORY]);
+        setCategories([ DEFAULT_CATEGORY ]);
       } finally {
         setLoadingCategories(false);
       }
@@ -131,24 +135,24 @@ export const UploadPage: React.FC = () => {
         value: category.id,
         label: category.name,
       })),
-    [categories],
+    [ categories ],
   );
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [ field ]: value,
     }));
-    if (formErrors[field]) {
+    if (formErrors[ field ]) {
       setFormErrors((prev) => {
         const next = { ...prev };
-        delete next[field];
+        delete next[ field ];
         return next;
       });
     }
 
     if (field === 'format' && selectedFile && typeof value === 'string') {
-      const nextAccepted = FORMAT_ACCEPT_MAP[value] ?? ['*/*'];
+      const nextAccepted = FORMAT_ACCEPT_MAP[ value ] ?? [ '*/*' ];
       if (!fileMatchesAcceptedTypes(selectedFile, nextAccepted)) {
         setSelectedFile(null);
         setUploadedFiles([]);
@@ -161,7 +165,7 @@ export const UploadPage: React.FC = () => {
   };
 
   const handleFileSelect = (files: File[]) => {
-    const file = files[0] ?? null;
+    const file = files[ 0 ] ?? null;
     setSelectedFile(file);
     setSubmitSuccess(null);
     setSubmitError(null);
@@ -227,6 +231,9 @@ export const UploadPage: React.FC = () => {
     if (formData.startDate && formData.endDate && formData.startDate > formData.endDate) {
       errors.timePeriod = 'Start date must be before end date';
     }
+    if (isPaidDataset && (!datasetPrice || parseFloat(datasetPrice) <= 0)) {
+      errors.price = 'Please enter a valid price for paid dataset';
+    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -249,6 +256,8 @@ export const UploadPage: React.FC = () => {
     });
     setSelectedFile(null);
     setUploadedFiles([]);
+    setIsPaidDataset(false);
+    setDatasetPrice('');
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -350,6 +359,8 @@ export const UploadPage: React.FC = () => {
         version: '1.0',
         isPublic: formData.isPublic,
         previewData: null,
+        isPaid: isPaidDataset,
+        price: isPaidDataset ? parseFloat(datasetPrice) : 0,
       };
 
       const createResponse = await createDataset(datasetPayload);
@@ -529,6 +540,86 @@ export const UploadPage: React.FC = () => {
                   onChange={(value) => handleInputChange('status', value)}
                   wrapperClassName="dark:text-gray-100"
                 />
+
+                <div className="space-y-4 border-t pt-4">
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                    Dataset Access Type
+                  </h3>
+
+                  <div className="space-y-3">
+                    <label className="flex items-start gap-3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input
+                        type="radio"
+                        name="accessType"
+                        checked={!isPaidDataset}
+                        onChange={() => {
+                          setIsPaidDataset(false);
+                          setDatasetPrice('');
+                        }}
+                        className="mt-1"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
+                          Free Download
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Anyone can download this dataset for free
+                        </div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-start gap-3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                      <input
+                        type="radio"
+                        name="accessType"
+                        checked={isPaidDataset}
+                        onChange={() => setIsPaidDataset(true)}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
+                          Paid Download
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                          Users must pay to download this dataset
+                        </div>
+
+                        {isPaidDataset && (
+                          <div className="mt-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                              Price (₽)
+                            </label>
+                            <input
+                              type="number"
+                              placeholder="499"
+                              value={datasetPrice}
+                              onChange={(e) => {
+                                setDatasetPrice(e.target.value);
+                                if (formErrors.price) {
+                                  setFormErrors((prev) => {
+                                    const next = { ...prev };
+                                    delete next.price;
+                                    return next;
+                                  });
+                                }
+                              }}
+                              min="1"
+                              step="1"
+                              required={isPaidDataset}
+                              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white ${formErrors.price
+                                  ? 'border-red-500 dark:border-red-500'
+                                  : 'border-gray-300 dark:border-gray-600'
+                                }`}
+                            />
+                            {formErrors.price && (
+                              <p className="text-sm text-red-600 mt-1">{formErrors.price}</p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                </div>
 
                 <Checkbox
                   label="Make dataset public"

@@ -10,6 +10,8 @@ import { BaseComponentProps } from '../../../types';
 interface DatasetDetailProps extends BaseComponentProps {
   dataset: Dataset;
   onDownload?: (id: string) => void;
+  onPurchase?: () => void;
+  hasPurchased?: boolean;
   onShare?: (id: string) => void;
   onRate?: (id: string, rating: number) => void;
   onComment?: (id: string, comment: string) => void;
@@ -18,11 +20,17 @@ interface DatasetDetailProps extends BaseComponentProps {
 export const DatasetDetail: React.FC<DatasetDetailProps> = ({
   dataset,
   onDownload,
+  onPurchase,
+  hasPurchased = false,
   onShare,
   onRate,
   onComment,
   className = '',
 }) => {
+  // Use hardcoded defaults if backend doesn't provide these fields
+  const isPaidDataset = dataset.isPaid ?? true;
+  const datasetPrice = dataset.price ?? 499;
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -70,10 +78,10 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               {dataset.title}
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
               {dataset.description}
             </p>
 
@@ -87,6 +95,11 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
               <Badge variant={getQualityColor(dataset.qualityScore)} size="md">
                 Quality: {dataset.qualityScore}/10
               </Badge>
+              {isPaidDataset && (
+                <Badge variant="success" size="md">
+                  Paid Dataset
+                </Badge>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -98,16 +111,37 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col space-y-2 ml-6">
-            <button
-              onClick={() => onDownload?.(dataset.id)}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium"
-            >
-              Download Dataset
-            </button>
+          <div className="flex flex-col space-y-2 ml-6 min-w-[200px]">
+            {isPaidDataset && !hasPurchased ? (
+              <>
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-2">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      Purchase to Download
+                    </div>
+                    <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                      ₽{datasetPrice.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={onPurchase}
+                  className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-green-800 font-medium transition-all flex items-center justify-center gap-2"
+                >
+                  <span>Purchase</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => onDownload?.(dataset.id)}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                <span>{hasPurchased ? 'Download (Purchased)' : 'Download'}</span>
+              </button>
+            )}
             <button
               onClick={() => onShare?.(dataset.id)}
-              className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+              className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors"
             >
               Share
             </button>
@@ -118,22 +152,22 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <DataCard title="Downloads" className="text-center">
-          <div className="text-3xl font-bold text-blue-600">
+          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
             {dataset.downloadCount.toLocaleString()}
           </div>
         </DataCard>
         <DataCard title="Views" className="text-center">
-          <div className="text-3xl font-bold text-green-600">
+          <div className="text-3xl font-bold text-green-600 dark:text-green-400">
             {dataset.viewCount.toLocaleString()}
           </div>
         </DataCard>
         <DataCard title="Quality Score" className="text-center">
-          <div className="text-3xl font-bold text-yellow-600">
+          <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
             {dataset.qualityScore}/10
           </div>
         </DataCard>
         <DataCard title="File Size" className="text-center">
-          <div className="text-3xl font-bold text-purple-600">
+          <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
             {formatFileSize(dataset.fileSize)}
           </div>
         </DataCard>
@@ -144,13 +178,13 @@ export const DatasetDetail: React.FC<DatasetDetailProps> = ({
         <div className="flex items-center space-x-4">
           <Avatar user={dataset.uploadedBy} size="lg" />
           <div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
               {dataset.uploadedBy.fullName}
             </h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-gray-600 dark:text-gray-400">
               {dataset.uploadedBy.affiliation || dataset.uploadedBy.userType}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-500 dark:text-gray-500">
               Joined {new Date(dataset.uploadedBy.createdAt).toLocaleDateString('ru-RU')}
             </p>
           </div>

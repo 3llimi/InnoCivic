@@ -42,5 +42,99 @@
     "version": "1.0",
     "isPublic": true,
     "previewData": null
+  },
+  {
+    "id": "b1f24406-dbfc-47cb-86d3-2d4ef2994fda",
+    "title": "fddgfgd",
+    "description": "fddgfgd",
+    "category": {
+      "id": "general",
+      "name": "General",
+      "description": "General civic datasets",
+      "icon": null
+    },
+    "tags": [
+      "fdgz"
+    ],
+    "format": "CSV",
+    "fileUrl": "/datasets/general/scores/2025-12-08/scores.csv",
+    "fileSize": 122,
+    "source": "scores",
+    "license": "Open Data",
+    "geographicCoverage": "Russian Federation",
+    "timePeriod": {
+      "start": "2025-12-17",
+      "end": "2025-12-31"
+    },
+    "uploadedBy": {
+      "id": "anonymous-user",
+      "email": "anonymous@innocivic",
+      "username": "anonymous",
+      "fullName": "Anonymous Contributor",
+      "role": "contributor",
+      "userType": "other",
+      "createdAt": "2025-12-08T09:33:33.355Z",
+      "lastLoginAt": "2025-12-08T09:33:33.355Z"
+    },
+    "uploadedAt": "2025-12-08T09:33:33.362783Z",
+    "lastUpdated": "2025-12-08T09:36:46.236732Z",
+    "downloadCount": 3,
+    "viewCount": 0,
+    "qualityScore": 0,
+    "status": "approved",
+    "metadata": {
+      "originalFilename": "scores.csv",
+      "contentType": "text/csv"
+    },
+    "version": "1.0",
+    "isPublic": true,
+    "previewData": null
+  },
+  {
+    "id": "4a3524a1-d9fb-45d2-94e2-d7f8217b65ef",
+    "title": "fhfgh",
+    "description": "ghfhf",
+    "category": {
+      "id": "general",
+      "name": "General",
+      "description": "General civic datasets",
+      "icon": null
+    },
+    "tags": [
+      "hfg"
+    ],
+    "format": "CSV",
+    "fileUrl": "/datasets/general/scores-5/2025-12-08/scores (5).csv",
+    "fileSize": 122,
+    "source": "scores (5)",
+    "license": "Open Data",
+    "geographicCoverage": "Russian Federation",
+    "timePeriod": {
+      "start": "2025-12-08",
+      "end": "2025-12-08"
+    },
+    "uploadedBy": {
+      "id": "anonymous-user",
+      "email": "anonymous@innocivic",
+      "username": "anonymous",
+      "fullName": "Anonymous Contributor",
+      "role": "contributor",
+      "userType": "other",
+      "createdAt": "2025-12-08T09:39:41.430Z",
+      "lastLoginAt": "2025-12-08T09:39:41.430Z"
+    },
+    "uploadedAt": "2025-12-08T09:39:41.433767Z",
+    "lastUpdated": "2025-12-08T09:47:50.649958Z",
+    "downloadCount": 2,
+    "viewCount": 0,
+    "qualityScore": 0,
+    "status": "approved",
+    "metadata": {
+      "originalFilename": "scores (5).csv",
+      "contentType": "text/csv"
+    },
+    "version": "1.0",
+    "isPublic": true,
+    "previewData": null
   }
 ]
